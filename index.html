@@ -94,6 +94,22 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">โครงการลูกค้าปลายทางรวม</label>
                     <input id="cfg-customer" type="text" value="คุณประภาส (ศุภาลัย) / คุณวิภา (แสนสิริ)" oninput="syncHeader()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
+                <!-- ส่วนที่แก้ไข: สถานที่ขึ้นของแบบเลือก + เติมเองได้ -->
+                <div class="md:col-span-2 lg:col-span-4 bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">เลือกสถานที่ขึ้นของ</label>
+                        <select id="cfg-location-select" onchange="handleLocationSelect(this)" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            <option value="คลังสินค้าโรงงานหลัก">คลังสินค้าโรงงานหลัก</option>
+                            <option value="คลังสินค้าสาขา A">คลังสินค้าสาขา A</option>
+                            <option value="หน้าร้าน / โชว์รูม">หน้าร้าน / โชว์รูม</option>
+                            <option value="custom">-- ระบุสถานที่อื่น ๆ เอง --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">พิมพ์ระบุสถานที่ (กรณีเลือกอื่น ๆ)</label>
+                        <input id="cfg-location-custom" type="text" placeholder="ระบุสถานที่ขึ้นของที่นี่..." oninput="syncHeader()" disabled class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 border-t border-slate-100 pt-4">
@@ -145,7 +161,7 @@
 
         <div id="toast" class="no-print fixed bottom-5 right-5 z-50 bg-slate-900 text-white py-3 px-5 rounded-xl shadow-xl border border-slate-800 flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-10 pointer-events-none">
             <div class="p-1 bg-teal-500/20 text-teal-400 rounded-full" id="toast-icon">
-                <i class="fa-solid fa-circle-check"></i>
+                <i class="fa-solid fa-check"></i>
             </div>
             <p id="toast-msg" class="text-xs font-medium m-0"></p>
         </div>
@@ -192,6 +208,11 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">หน่วยนับ</label>
                             <input id="new-row-unit" type="text" value="ตัว" placeholder="ตัวอย่าง: ตัว, ชุด, ใบ" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
                         </div>
+                    </div>
+                    <!-- ส่วนที่แก้ไข: เพิ่ม Input หมายเหตุใน Modal ตอนเพิ่มของ -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">หมายเหตุรายการสินค้า</label>
+                        <input id="new-row-remark" type="text" placeholder="ระบุตำหนิ การจัดวาง หรือคำสั่งพิเศษ..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">แนบรูปภาพสินค้าประกอบ</label>
@@ -243,7 +264,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-sm print-border">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-sm print-border">
                 <div>
                     <div class="text-xs text-slate-400 font-semibold uppercase">พนักงานขับรถ / ทะเบียนรถ:</div>
                     <div id="lbl-truck" class="font-bold text-slate-800 text-sm md:text-base mt-1">-</div>
@@ -259,6 +280,11 @@
                 <div>
                     <div class="text-xs text-slate-400 font-semibold uppercase">ปลายทาง / โครงการลูกค้ารวม:</div>
                     <div id="lbl-customer" class="font-bold text-slate-800 text-sm md:text-base mt-1">-</div>
+                </div>
+                <!-- แสดงผลสถานที่ขึ้นของบนหัวฟอร์มจริง -->
+                <div>
+                    <div class="text-xs text-slate-400 font-semibold uppercase">สถานที่ขึ้นสินค้า:</div>
+                    <div id="lbl-location" class="font-bold text-teal-700 text-sm md:text-base mt-1">คลังสินค้าโรงงานหลัก</div>
                 </div>
             </div>
 
@@ -287,7 +313,9 @@
                             <th class="border border-slate-300 p-2 text-left min-w-[200px]">รายการสินค้าโซฟาและอุปกรณ์ของแถม</th>
                             <th class="border border-slate-300 p-2 text-center w-24 bg-teal-950 text-teal-100 print:bg-slate-100 print:text-black">จำนวนส่ง</th>
                             <th class="border border-slate-300 p-2 text-center w-16">หน่วย</th>
-                            <th class="border border-slate-300 p-2 text-left w-52">ช่องตรวจเช็กเดินติ๊กกระดาษ (ติ๊กสี่เหลี่ยมตามจำนวนจริง)</th>
+                            <th class="border border-slate-300 p-2 text-left w-48">ช่องตรวจเช็กเดินติ๊กกระดาษ</th>
+                            <!-- ส่วนที่แก้ไข: เพิ่ม Header คอลัมน์หมายเหตุในตารางหลัก -->
+                            <th class="border border-slate-300 p-2 text-left w-44">หมายเหตุ</th>
                             <th class="th-delete-column border border-slate-300 p-2 text-center w-14 no-print">ลบ</th>
                         </tr>
                     </thead>
@@ -295,7 +323,7 @@
                         
                         <tr id="cat-row-1" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-1">
                             <td class="border border-slate-300 p-2 text-center">1</td>
-                            <td colspan="6" class="border border-slate-300 p-2">หมวดที่ 1: รายการตัวโซฟาหลัก (Sofa Units)</td>
+                            <td colspan="7" class="border border-slate-300 p-2">หมวดที่ 1: รายการตัวโซฟาหลัก (Sofa Units)</td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
                         </tr>
                         
@@ -320,6 +348,10 @@
                                     <div class="check-square" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs hidden"></i></div>
                                 </div>
                             </td>
+                            <!-- ส่วนที่แก้ไข: เพิ่มข้อมูลแสดงผลช่องหมายเหตุเริ่มต้นในโค้ด -->
+                            <td class="border border-slate-300 p-2">
+                                <input type="text" value="วางแนวนอนชั้นล่างสุด" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400">
+                            </td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print">
                                 <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
@@ -327,7 +359,7 @@
 
                         <tr id="cat-row-2" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-2">
                             <td class="border border-slate-300 p-2 text-center">2</td>
-                            <td colspan="6" class="border border-slate-300 p-2">หมวดที่ 2: อุปกรณ์เสริม / ของแถม (Accessories)</td>
+                            <td colspan="7" class="border border-slate-300 p-2">หมวดที่ 2: อุปกรณ์เสริม / ของแถม (Accessories)</td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
                         </tr>
 
@@ -430,7 +462,6 @@
 
         async function initApp() {
             if (currentUrlJob) {
-                // โหมดคนขับรถ (เปิดผ่านลิงก์แชร์ที่มี ?job=)
                 isDriverMode = true;
                 applyDriverViewRestrictions();
                 document.getElementById('cfg-job').value = currentUrlJob;
@@ -438,8 +469,6 @@
                 await loadSupabaseSheet(currentUrlJob);
                 updateLinkNotice(currentUrlJob);
             } else {
-                // โหมดแอดมิน (ไม่มี ?job=)
-                // ตรวจสอบว่าแอดมินเคยเปิดจ๊อบค้างไว้ก่อนรีเฟรชหรือไม่
                 const savedAdminJob = localStorage.getItem('last_admin_job');
                 if (savedAdminJob) {
                     document.getElementById('cfg-job').value = savedAdminJob;
@@ -452,7 +481,21 @@
             }
         }
 
-        // ฟังก์ชันซ่อนเครื่องมือแอดมิน สำหรับโหมดคนขับรถ
+        // ส่วนที่แก้ไข: จัดการเปิด/ปิดช่องกรอกกรณีเลือกสถานที่ระบุเอง
+        function handleLocationSelect(selectEl) {
+            const customInput = document.getElementById('cfg-location-custom');
+            if (selectEl.value === 'custom') {
+                customInput.disabled = false;
+                customInput.classList.remove('bg-slate-100');
+                customInput.focus();
+            } else {
+                customInput.disabled = true;
+                customInput.value = '';
+                customInput.classList.add('bg-slate-100');
+            }
+            syncHeader();
+        }
+
         function applyDriverViewRestrictions() {
             document.getElementById('admin-control-bar').classList.add('hidden');
             document.getElementById('admin-config-fields').classList.add('pointer-events-none', 'opacity-80');
@@ -461,13 +504,11 @@
             document.getElementById('btn-copy-link').classList.add('hidden');
             document.getElementById('btn-history-trigger').classList.add('hidden');
             
-            // ซ่อนคอลัมน์ลบสินค้าในตาราง
             const deleteThs = document.querySelectorAll('.th-delete-column');
             deleteThs.forEach(el => el.classList.add('hidden'));
             const deleteTds = document.querySelectorAll('.td-delete-column');
             deleteTds.forEach(el => el.classList.add('hidden'));
 
-            // ปรับแต่งปุ่มบันทึกให้คนขับเห็นชัดๆ ตัวใหญ่ๆ
             const actionGroup = document.getElementById('action-buttons-group');
             actionGroup.className = "grid grid-cols-1 w-full";
         }
@@ -504,12 +545,17 @@
             showNotification("อัปเดตเวลาปัจจุบันสำเร็จ");
         }
 
+        // ส่วนที่แก้ไข: ดึงข้อมูลสถานที่ขึ้นของไปอัปเดตบนหัวฟอร์ม
         function syncHeader() {
             document.getElementById('lbl-truck').innerText = document.getElementById('cfg-truck').value || "-";
             document.getElementById('lbl-date').innerText = document.getElementById('cfg-date').value || "-";
             document.getElementById('lbl-job').innerText = document.getElementById('cfg-job').value || "-";
             document.getElementById('lbl-customer').innerText = document.getElementById('cfg-customer').value || "-";
             
+            const locationSelect = document.getElementById('cfg-location-select').value;
+            const locationCustom = document.getElementById('cfg-location-custom').value;
+            document.getElementById('lbl-location').innerText = (locationSelect === 'custom' ? locationCustom : locationSelect) || "ไม่ได้ระบุ";
+
             const start = document.getElementById('cfg-time-start').value || "-";
             const end = document.getElementById('cfg-time-end').value || "-";
             document.getElementById('lbl-time-start').innerText = `${start} น.`;
@@ -551,6 +597,7 @@
             document.getElementById('new-row-spec').value = '';
             document.getElementById('new-row-qty').value = '1';
             document.getElementById('new-row-unit').value = 'ตัว';
+            document.getElementById('new-row-remark').value = ''; // เคลียร์ช่องหมายเหตุ
             document.getElementById('new-row-image').value = '';
             document.getElementById('add-row-modal').classList.remove('hidden');
         }
@@ -574,6 +621,7 @@
             });
         }
 
+        // ส่วนที่แก้ไข: ดึงค่าและส่งค่าหมายเหตุ (Remark) ไปยังฟังก์ชัน Insert
         function submitNewRow() {
             const rowJob = document.getElementById('new-row-job').value.trim() || 'N/A';
             const catId = document.getElementById('new-row-category').value;
@@ -581,6 +629,7 @@
             const spec = document.getElementById('new-row-spec').value.trim();
             const qty = parseInt(document.getElementById('new-row-qty').value) || 1;
             const unit = document.getElementById('new-row-unit').value.trim() || 'ตัว';
+            const remark = document.getElementById('new-row-remark').value.trim();
             const imgInput = document.getElementById('new-row-image');
 
             if (!name) {
@@ -592,12 +641,12 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     compressImage(e.target.result, 120, 120, (compressedBase64) => {
-                        insertDispatchRow(rowJob, catId, name, spec, qty, unit, compressedBase64);
+                        insertDispatchRow(rowJob, catId, name, spec, qty, unit, remark, compressedBase64);
                     });
                 };
                 reader.readAsDataURL(imgInput.files[0]);
             } else {
-                insertDispatchRow(rowJob, catId, name, spec, qty, unit, null);
+                insertDispatchRow(rowJob, catId, name, spec, qty, unit, remark, null);
             }
             closeAddRowModal();
         }
@@ -621,7 +670,8 @@
             };
         }
 
-        function insertDispatchRow(rowJob, catId, name, spec, qty, unit, base64Image) {
+        // ส่วนที่แก้ไข: ปรับปรุงโครงสร้างตารางตอน Insert ให้รองรับคอลัมน์หมายเหตุ
+        function insertDispatchRow(rowJob, catId, name, spec, qty, unit, remark, base64Image) {
             const tbody = document.getElementById('table-body');
             const newRow = document.createElement('tr');
             newRow.className = "hover:bg-slate-50";
@@ -650,6 +700,9 @@
                 </td>
                 <td class="border border-slate-300 p-2 text-center text-slate-500">${escapeHtml(unit)}</td>
                 <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${checkboxHtml}</div></td>
+                <td class="border border-slate-300 p-2">
+                    <input type="text" value="${escapeHtml(remark)}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400" ${isDriverMode ? 'disabled' : ''}>
+                </td>
                 <td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}">
                     <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
@@ -733,6 +786,7 @@
             }
         }
 
+        // ส่วนที่แก้ไข: ดึงค่าจากช่อง Input หมายเหตุในแต่ละแถว เก็บลง JSON เพื่อส่งขึ้น Supabase
         function getSheetRowsData() {
             const rows = [];
             const trs = document.querySelectorAll('#table-body tr');
@@ -755,16 +809,18 @@
                     const qty = tr.cells[4].querySelector('input').value;
                     const unit = tr.cells[5].innerText;
                     const checksState = Array.from(tr.querySelectorAll('.check-square')).map(sq => sq.classList.contains('checked'));
+                    const remark = tr.cells[7].querySelector('input').value; // ดึงค่าจาก input หมายเหตุ
 
                     rows.push({
                         isCategory: false, num: num, itemJob: itemJob, name: name, spec: spec,
-                        qty: qty, unit: unit, img: imgBase64, parentCat: parentCat, checksState: checksState
+                        qty: qty, unit: unit, img: imgBase64, parentCat: parentCat, checksState: checksState, remark: remark
                     });
                 }
             });
             return rows;
         }
 
+        // ส่วนที่แก้ไข: แนบตัวแปรสถานที่ขึ้นของ (Location ข้อมูลหลัก) ส่งขึ้น Cloud ด้วย
         async function saveCurrentSheetToSupabase() {
             const jobNo = document.getElementById('cfg-job').value.trim();
             if (!jobNo) {
@@ -779,6 +835,10 @@
             const img3 = getEvidenceImageBase64('img-preview-3');
             const img4 = getEvidenceImageBase64('img-preview-4');
 
+            const locationSelect = document.getElementById('cfg-location-select').value;
+            const locationCustom = document.getElementById('cfg-location-custom').value;
+            const finalLocation = locationSelect === 'custom' ? locationCustom : locationSelect;
+
             const payload = {
                 job: jobNo,
                 customer: document.getElementById('cfg-customer').value,
@@ -786,6 +846,7 @@
                 delivery_date: document.getElementById('cfg-date').value,
                 time_start: document.getElementById('cfg-time-start').value,
                 time_end: document.getElementById('cfg-time-end').value,
+                location: finalLocation, // เพิ่มข้อมูลสถานที่หลัก
                 rows_data: getSheetRowsData(),
                 evidence_images: { img1, img2, img3, img4 }
             };
@@ -802,7 +863,6 @@
                 document.getElementById('lbl-status').innerText = "ข้อมูลอัปเดตบนคลาวด์แล้ว";
                 document.getElementById('lbl-status').className = "text-teal-600 font-semibold";
                 
-                // หากเป็นแอดมิน ให้จำรหัสจ๊อบนี้ลงในเครื่อง เพื่อเวลารีเฟรชจะได้เปิดข้อมูลเดิมออโต้
                 if (!isDriverMode) {
                     localStorage.setItem('last_admin_job', jobNo);
                 }
@@ -810,6 +870,7 @@
             }
         }
 
+        // ส่วนที่แก้ไข: ดึงข้อมูลประวัติ และ Map ข้อมูลสถานที่และหมายเหตุกลับเข้าโครงสร้างหน้าจอ
         function applySheetDataSnapshot(snapshot) {
             document.getElementById('cfg-customer').value = snapshot.customer || "";
             document.getElementById('cfg-job').value = snapshot.job || "";
@@ -818,6 +879,23 @@
             document.getElementById('cfg-time-start').value = snapshot.time_start || snapshot.timeStart || "";
             document.getElementById('cfg-time-end').value = snapshot.time_end || snapshot.timeEnd || "";
             
+            // จัดการข้อมูลชุด "สถานที่ขึ้นของ" ตอนโหลดกลับมา
+            const savedLoc = snapshot.location || "คลังสินค้าโรงงานหลัก";
+            const selectEl = document.getElementById('cfg-location-select');
+            const customInput = document.getElementById('cfg-location-custom');
+            
+            if (["คลังสินค้าโรงงานหลัก", "คลังสินค้าสาขา A", "หน้าร้าน / โชว์รูม"].includes(savedLoc)) {
+                selectEl.value = savedLoc;
+                customInput.value = '';
+                customInput.disabled = true;
+                customInput.classList.add('bg-slate-100');
+            } else {
+                selectEl.value = 'custom';
+                customInput.value = savedLoc;
+                customInput.disabled = false;
+                customInput.classList.remove('bg-slate-100');
+            }
+
             syncHeader();
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
@@ -829,7 +907,7 @@
                     catRow.id = `cat-row-${row.catId.split('-')[1]}`;
                     catRow.setAttribute('data-cat-id', row.catId);
                     catRow.className = "bg-slate-100 font-bold text-slate-800 print:bg-slate-50";
-                    catRow.innerHTML = `<td class="border border-slate-300 p-2 text-center">${row.num}</td><td colspan="6" class="border border-slate-300 p-2">${escapeHtml(row.name)}</td><td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}"></td>`;
+                    catRow.innerHTML = `<td class="border border-slate-300 p-2 text-center">${row.num}</td><td colspan="7" class="border border-slate-300 p-2">${escapeHtml(row.name)}</td><td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}"></td>`;
                     tbody.appendChild(catRow);
                 } else {
                     const itemRow = document.createElement('tr');
@@ -847,6 +925,7 @@
                     let imageHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
                     if (row.img) { imageHtml = `<img src="${row.img}" class="w-12 h-12 object-cover rounded border border-slate-200" alt="Product Image">`; }
 
+                    // ใส่ค่า row.remark ที่ดึงมาลงใน value ของ input หมายเหตุ
                     itemRow.innerHTML = `
                         <td class="border border-slate-300 p-2 text-center text-slate-500">${row.num}</td>
                         <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${escapeHtml(row.itemJob || '')}</td>
@@ -860,6 +939,9 @@
                         </td>
                         <td class="border border-slate-300 p-2 text-center text-slate-500">${escapeHtml(row.unit)}</td>
                         <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${checkboxHtml}</div></td>
+                        <td class="border border-slate-300 p-2">
+                            <input type="text" value="${escapeHtml(row.remark || '')}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400" ${isDriverMode ? 'disabled' : ''}>
+                        </td>
                         <td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}">
                             <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
@@ -935,7 +1017,6 @@
             }).join('');
         }
 
-        // ฟังก์ชันลบใบงานออกจากระบบคลาวด์
         async function deleteSheetFromSupabase(jobNo) {
             if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบใบงานเลขที่ ${jobNo} ออกจากคลาวด์ถาวร?`)) {
                 return;
@@ -951,13 +1032,9 @@
                 showNotification("ไม่สามารถลบข้อมูลได้ กรุณาตรวจสอบสิทธิ์ RLS", false);
             } else {
                 showNotification(`ลบใบงาน ${jobNo} ออกจากคลาวด์สำเร็จแล้ว`);
-                
-                // หากลบจ๊อบที่แสดงผลอยู่ปัจจุบัน ให้เคลียร์ค่าท้องถิ่น
                 if (localStorage.getItem('last_admin_job') === jobNo) {
                     localStorage.removeItem('last_admin_job');
                 }
-                
-                // นำการ์ดประวัติออกจากหน้าแสดงผลโดยไม่ต้องรีเฟรชส่วนอื่น
                 const card = document.getElementById(`history-card-${jobNo}`);
                 if (card) card.remove();
             }
@@ -967,7 +1044,6 @@
             const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
             if (data && !error) {
                 applySheetDataSnapshot(data);
-                // หากเป็นแอดมิน ให้บันทึกการเปิดจ๊อบล่าสุดไว้ในคอมพิวเตอร์
                 if (!isDriverMode) {
                     localStorage.setItem('last_admin_job', jobNo);
                 }
