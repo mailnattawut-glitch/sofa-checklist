@@ -783,7 +783,7 @@
             document.getElementById('cfg-date').value = snapshot.delivery_date || '';
             
             // ปรับแมปค่าให้ตรงกับคอลัมน์ดั้งเดิมของตารางฐานข้อมูลหลัก
-            document.getElementById('cfg-customer').value = snapshot.customer_project || snapshot.customer || ''; 
+            document.getElementById('cfg-customer').value = snapshot.customer || snapshot.customer || ''; 
             document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; 
 
             if (snapshot.rows_metadata) {
@@ -922,7 +922,7 @@
             const payload = {
                 truck: document.getElementById('cfg-truck').value,
                 delivery_date: document.getElementById('cfg-date').value,
-                customer_project: document.getElementById('cfg-customer').value, 
+                customer: document.getElementById('cfg-customer').value, 
                 rows: getSheetRowsData(), 
                 rows_metadata: {
                     loading_location: finalLocation,
@@ -1008,7 +1008,7 @@
             listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังดึงข้อมูลฐานคลาวด์...</div>';
 
             try {
-                const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer_project').order('job', { ascending: false });
+                const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer').order('job', { ascending: false });
                 
                 if (error || !data) {
                     console.error(error);
@@ -1030,7 +1030,7 @@
                         <div class="truncate mr-2 cursor-pointer flex-grow" onclick="loadSupabaseSheet('${item.job}'); toggleHistoryModal(false);">
                             <div class="font-mono font-bold text-sm text-indigo-700">JOB: ${item.job}</div>
                             <div class="text-xs text-slate-700 font-semibold mt-0.5">${item.truck || 'ไม่ระบุรถ'}</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer_project || '-'}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer || '-'}</div>
                         </div>
                         <button onclick="deleteSheetFromSupabase('${item.job}')" class="text-slate-400 hover:text-red-500 p-2 shrink-0" title="ลบใบงานถาวร">
                             <i class="fa-solid fa-trash-can text-sm"></i>
