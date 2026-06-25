@@ -783,35 +783,33 @@
             document.getElementById('cfg-date').value = snapshot.delivery_date || '';
             
             // ปรับแมปค่าให้ตรงกับคอลัมน์ดั้งเดิมของตารางฐานข้อมูลหลัก
-            document.getElementById('cfg-customer').value = snapshot.customer || snapshot.customer || ''; 
+           document.getElementById('cfg-customer').value =
+    snapshot.customer || '';
             document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; 
 
-            if (snapshot.rows_metadata) {
-                document.getElementById('cfg-time-start').value = snapshot.rows_metadata.time_start || '08:30';
-                document.getElementById('cfg-remarks').value = snapshot.rows_metadata.remarks || '';
-                
-                const selectLoc = document.getElementById('cfg-location-select');
-                const customInput = document.getElementById('cfg-location-custom');
-                const savedLoc = snapshot.rows_metadata.loading_location || 'main_factory';
-                const standardLocations = ['main_factory', 'warehouse_c2', 'warehouse_c7', 'showroom'];
-                
-                if (standardLocations.includes(savedLoc)) {
-                    if(selectLoc) selectLoc.value = savedLoc;
-                    if(customInput) {
-                        customInput.value = '';
-                        customInput.disabled = true;
-                        customInput.classList.add('bg-slate-100');
-                    }
-                } else {
-                    if(selectLoc) selectLoc.value = 'other';
-                    if(customInput) {
-                        customInput.value = savedLoc;
-                        customInput.disabled = false;
-                        customInput.classList.remove('bg-slate-100');
-                    }
-                }
+           if (snapshot.rows_data) {
 
-                const evPics = snapshot.rows_metadata.evidences_pack || [];
+    document.getElementById('cfg-time-start').value =
+        snapshot.time_start || '08:30';
+
+    document.getElementById('cfg-remarks').value = '';
+
+    const selectLoc =
+        document.getElementById('cfg-location-select');
+
+    const customInput =
+        document.getElementById('cfg-location-custom');
+
+    if (selectLoc) {
+        selectLoc.value = 'main_factory';
+    }
+
+    if (customInput) {
+        customInput.value = '';
+    }
+
+    const evPics =
+        snapshot.evidence_images || [];
                 for (let i = 1; i <= 4; i++) {
                     const img = document.getElementById(`img-preview-${i}`);
                     if (img && evPics[i-1]) {
@@ -837,7 +835,7 @@
                 }
             }
             
-            renderTableRowsFromData(snapshot.rows);
+            renderTableRowsFromData(snapshot.rows_data);
             syncHeader();
         }
 
@@ -897,7 +895,7 @@
                 }
             });
         }
-
+*******
         async function saveCurrentSheetToSupabase() {
             const rawJob = document.getElementById('cfg-job').value;
             const primaryJob = rawJob.split(',')[0].trim();
@@ -920,18 +918,15 @@
 
             // แมปข้อมูลจัดรูปฟิลด์ให้ถูกต้องตามสเปกโครงสร้างตู้ฐานข้อมูลเดิม ป้องกันโดน Reject
             const payload = {
-                truck: document.getElementById('cfg-truck').value,
-                delivery_date: document.getElementById('cfg-date').value,
-                customer: document.getElementById('cfg-customer').value, 
-                rows: getSheetRowsData(), 
-                rows_metadata: {
-                    loading_location: finalLocation,
-                    time_start: document.getElementById('cfg-time-start').value,
-                    time_end: document.getElementById('cfg-date-ready').value || '',
-                    remarks: document.getElementById('cfg-remarks').value,
-                    evidences_pack: base64Evidences
-                }
-            };
+    job: primaryJob,
+    customer: document.getElementById('cfg-customer').value,
+    truck: document.getElementById('cfg-truck').value,
+    delivery_date: document.getElementById('cfg-date').value,
+    time_start: document.getElementById('cfg-time-start').value,
+    time_end: document.getElementById('cfg-date-ready').value || '',
+    rows_data: getSheetRowsData(),
+    evidence_images: base64Evidences
+};
 
             try {
                 const { data: existing, error: checkErr } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob);
@@ -1082,44 +1077,9 @@
 const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
 const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-// ----------------------------------------------------
+// ----------------------------------------------------SUPABASE_URLSUPABASE_URL
 // --- ฟังก์ชันสำหรับคลาวด์ ---
-async function saveSheetToSupabase() {
-    const jobNo = document.getElementById('cfg-job').value.trim();
-    if (!jobNo) { showNotification("กรุณาระบุเลขที่ Job", false); return; }
-
-    const payload = {
-        job: jobNo,
-        customer: document.getElementById('cfg-customer').value.trim(),
-        truck: document.getElementById('cfg-truck').value.trim(),
-        delivery_date: document.getElementById('cfg-date').value,
-        time_start: document.getElementById('cfg-time-start').value,
-        time_end: document.getElementById('cfg-time-end').value,
-        remarks: document.getElementById('cfg-remarks').value || '',
-        location: document.getElementById('cfg-location-select')?.value || 'main_factory',
-        rows_data: getSheetRowsData(),          
-        evidence_images: getEvidenceImagesBase64() 
-    };
-
-    const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', jobNo).maybeSingle();
-    const { error } = existing 
-        ? await _supabase.from('dispatch_sheets').update(payload).eq('job', jobNo)
-        : await _supabase.from('dispatch_sheets').insert([payload]);
-
-    if (error) { showNotification("บันทึกไม่สำเร็จ: " + error.message, false); }
-    else { showNotification(`บันทึกจ๊อบ ${jobNo} สำเร็จ!`); loadHistoryList(); }
-}
-
-async function loadSupabaseSheet(jobNo) {
-    try {
-        const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
-        if (data && !error) {
-            applySheetDataSnapshot(data);
-            showNotification(`โหลดจ๊อบ ${jobNo} สำเร็จ`);
-        } else {
-            showNotification("ไม่พบข้อมูลบนคลาวด์", false);
-        }
-    } catch (err) {
+ catch (err) {
         showNotification("ดึงข้อมูลขัดข้อง", false);
     }
 }
