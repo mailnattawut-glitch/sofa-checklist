@@ -94,15 +94,16 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">โครงการลูกค้าปลายทางรวม</label>
                     <input id="cfg-customer" type="text" value="คุณประภาส (ศุภาลัย) / คุณวิภา (แสนสิริ)" oninput="syncHeader()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
-                <!-- ส่วนที่แก้ไข: สถานที่ขึ้นของแบบเลือก + เติมเองได้ -->
+                
                 <div class="md:col-span-2 lg:col-span-4 bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">เลือกสถานที่ขึ้นของ</label>
-                        <select id="cfg-location-select" onchange="handleLocationSelect(this)" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">
-                            <option value="คลังสินค้าโรงงานหลัก">คลังสินค้าโรงงานหลัก</option>
-                            <option value="คลังสินค้าสาขา A">คลังสินค้าสาขา A</option>
-                            <option value="หน้าร้าน / โชว์รูม">หน้าร้าน / โชว์รูม</option>
-                            <option value="custom">-- ระบุสถานที่อื่น ๆ เอง --</option>
+                        <select id="cfg-location-select" onchange="handleLocationSelect(this)" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500">                        
+                            <option value="main_factory">คลังสินค้าโรงงานหลัก</option>
+                            <option value="warehouse_c2">โกดัง C2</option>
+                            <option value="warehouse_c7">โกดัง C7</option>
+                            <option value="showroom">หน้าร้าน / โชว์รูม</option>
+                            <option value="other">-- ระบุสถานที่อื่นๆ เอง --</option>
                         </select>
                     </div>
                     <div>
@@ -112,24 +113,26 @@
                 </div>
             </div>
 
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">หมายเหตุประจำใบงาน (REMARKS)</label>
+                <textarea id="cfg-remarks" rows="2" oninput="syncHeader()" placeholder="กรอกรายละเอียด หรือหมายเหตุสำคัญประจำเที่ยวรถนี้..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 border-t border-slate-100 pt-4">
                 <div id="admin-time-fields" class="lg:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">เวลาเริ่มขึ้นของ (Start Loading)</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">เวลาขึ้นของ (Start Loading)</label>
                         <div class="flex gap-2">
                             <input id="cfg-time-start" type="text" value="08:30" oninput="syncHeader()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                            <button onclick="setCurrentTime('cfg-time-start')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg border border-slate-300 transition-all flex items-center justify-center" title="ดึงเวลาปัจจุบัน">
+                            <button onclick="setCurrentTime('cfg-time-start')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-lg border border-slate-300 transition-all flex items-center justify-center" title="ดึงเวลาปัจจุบัน">
                                 <i class="fa-regular fa-clock"></i>
                             </button>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">เวลาขึ้นของเสร็จ/ปล่อยรถ (Ready Dispatch)</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">วันที่ขึ้นของเสร็จ/ปล่อยรถ (READY DISPATCH)</label>
                         <div class="flex gap-2">
-                            <input id="cfg-time-end" type="text" value="09:15" oninput="syncHeader()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                            <button onclick="setCurrentTime('cfg-time-end')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg border border-slate-300 transition-all flex items-center justify-center" title="ดึงเวลาปัจจุบัน">
-                                <i class="fa-regular fa-clock"></i>
-                            </button>
+                            <input id="cfg-date-ready" type="date" oninput="syncHeader()" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
                         </div>
                     </div>
                 </div>
@@ -480,7 +483,7 @@
                 }
             }
         }
-
+**************************************************
         // ส่วนที่แก้ไข: จัดการเปิด/ปิดช่องกรอกกรณีเลือกสถานที่ระบุเอง
         function handleLocationSelect(selectEl) {
             const customInput = document.getElementById('cfg-location-custom');
@@ -819,6 +822,22 @@
             });
             return rows;
         }
+function getSheetDataSnapshot() {
+            const selectLoc = document.getElementById('cfg-location-select').value;
+            const finalLocation = selectLoc === 'custom' ? document.getElementById('cfg-location-custom').value : selectLoc;
+            
+            return {
+                job: document.getElementById('cfg-job').value,
+                truck: document.getElementById('cfg-truck').value,
+                delivery_date: document.getElementById('cfg-date').value,
+                customer_project: document.getElementById('cfg-customer').value,
+                loading_location: finalLocation,
+                time_start: document.getElementById('cfg-time-start').value,
+                time_end: document.getElementById('readyDispatchDate').value, // ดึงค่าจากช่องวันที่ปล่อยรถตัวใหม่
+                remarks: document.getElementById('formRemarks').value,        // ดึงค่าจากช่องหมายเหตุรวมตัวใหม่
+                rows: getSheetRowsData()
+            };
+        }
 
         // ส่วนที่แก้ไข: แนบตัวแปรสถานที่ขึ้นของ (Location ข้อมูลหลัก) ส่งขึ้น Cloud ด้วย
         async function saveCurrentSheetToSupabase() {
@@ -871,32 +890,36 @@
         }
 
         // ส่วนที่แก้ไข: ดึงข้อมูลประวัติ และ Map ข้อมูลสถานที่และหมายเหตุกลับเข้าโครงสร้างหน้าจอ
-        function applySheetDataSnapshot(snapshot) {
-            document.getElementById('cfg-customer').value = snapshot.customer || "";
-            document.getElementById('cfg-job').value = snapshot.job || "";
-            document.getElementById('cfg-truck').value = snapshot.truck || "";
-            document.getElementById('cfg-date').value = snapshot.delivery_date || snapshot.date || "";
-            document.getElementById('cfg-time-start').value = snapshot.time_start || snapshot.timeStart || "";
-            document.getElementById('cfg-time-end').value = snapshot.time_end || snapshot.timeEnd || "";
+       function applySheetDataSnapshot(snapshot) {
+            if (!snapshot) return;
+            document.getElementById('cfg-job').value = snapshot.job || '';
+            document.getElementById('cfg-truck').value = snapshot.truck || '';
+            document.getElementById('cfg-date').value = snapshot.delivery_date || '';
+            document.getElementById('cfg-customer').value = snapshot.customer_project || '';
+            document.getElementById('cfg-time-start').value = snapshot.time_start || '';
+            document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; // โหลดข้อมูลวันที่กลับเข้าช่องอินพุต
+            document.getElementById('cfg-remarks').value = snapshot.remarks || '';    // โหลดข้อมูลหมายเหตุกลับเข้าช่องข้อความ
             
-            // จัดการข้อมูลชุด "สถานที่ขึ้นของ" ตอนโหลดกลับมา
-            const savedLoc = snapshot.location || "คลังสินค้าโรงงานหลัก";
-            const selectEl = document.getElementById('cfg-location-select');
+            const standardLocations = ['main_factory', 'warehouse_c2', 'warehouse_c7', 'showroom'];
+            const selectLoc = document.getElementById('cfg-location-select');
             const customInput = document.getElementById('cfg-location-custom');
             
-            if (["คลังสินค้าโรงงานหลัก", "คลังสินค้าสาขา A", "หน้าร้าน / โชว์รูม"].includes(savedLoc)) {
-                selectEl.value = savedLoc;
+            if (standardLocations.includes(snapshot.loading_location)) {
+                selectLoc.value = snapshot.loading_location;
                 customInput.value = '';
                 customInput.disabled = true;
                 customInput.classList.add('bg-slate-100');
             } else {
-                selectEl.value = 'custom';
-                customInput.value = savedLoc;
+                selectLoc.value = 'other';
+                customInput.value = snapshot.loading_location || '';
                 customInput.disabled = false;
                 customInput.classList.remove('bg-slate-100');
             }
-
+            
+            renderTableRowsFromData(snapshot.rows);
             syncHeader();
+            updateFormStatusLabel();
+        }
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
