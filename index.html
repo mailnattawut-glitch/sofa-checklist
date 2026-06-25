@@ -212,7 +212,6 @@
                             <input id="new-row-unit" type="text" value="ตัว" placeholder="ตัวอย่าง: ตัว, ชุด, ใบ" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
                         </div>
                     </div>
-                    <!-- ส่วนที่แก้ไข: เพิ่ม Input หมายเหตุใน Modal ตอนเพิ่มของ -->
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">หมายเหตุรายการสินค้า</label>
                         <input id="new-row-remark" type="text" placeholder="ระบุตำหนิ การจัดวาง หรือคำสั่งพิเศษ..." class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
@@ -230,8 +229,8 @@
             </div>
         </div>
 
-        <div id="history-modal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm justify-end transition-all">
-            <div class="bg-white w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between">
+        <div id="history-modal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm justify-end flex transition-all">
+            <div class="bg-white w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between ml-auto">
                 <div class="flex flex-col h-full">
                     <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                         <h3 class="font-bold text-slate-900 flex items-center gap-2">
@@ -284,7 +283,6 @@
                     <div class="text-xs text-slate-400 font-semibold uppercase">ปลายทาง / โครงการลูกค้ารวม:</div>
                     <div id="lbl-customer" class="font-bold text-slate-800 text-sm md:text-base mt-1">-</div>
                 </div>
-                <!-- แสดงผลสถานที่ขึ้นของบนหัวฟอร์มจริง -->
                 <div>
                     <div class="text-xs text-slate-400 font-semibold uppercase">สถานที่ขึ้นสินค้า:</div>
                     <div id="lbl-location" class="font-bold text-teal-700 text-sm md:text-base mt-1">คลังสินค้าโรงงานหลัก</div>
@@ -317,19 +315,16 @@
                             <th class="border border-slate-300 p-2 text-center w-24 bg-teal-950 text-teal-100 print:bg-slate-100 print:text-black">จำนวนส่ง</th>
                             <th class="border border-slate-300 p-2 text-center w-16">หน่วย</th>
                             <th class="border border-slate-300 p-2 text-left w-48">ช่องตรวจเช็กเดินติ๊กกระดาษ</th>
-                            <!-- ส่วนที่แก้ไข: เพิ่ม Header คอลัมน์หมายเหตุในตารางหลัก -->
                             <th class="border border-slate-300 p-2 text-left w-44">หมายเหตุ</th>
                             <th class="th-delete-column border border-slate-300 p-2 text-center w-14 no-print">ลบ</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        
                         <tr id="cat-row-1" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-1">
                             <td class="border border-slate-300 p-2 text-center">1</td>
                             <td colspan="7" class="border border-slate-300 p-2">หมวดที่ 1: รายการตัวโซฟาหลัก (Sofa Units)</td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
                         </tr>
-                        
                         <tr class="hover:bg-slate-50" data-row-id="1" data-parent-cat="cat-1">
                             <td class="border border-slate-300 p-2 text-center text-slate-500">1.1</td>
                             <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">SOC-2604-5555</td>
@@ -351,7 +346,6 @@
                                     <div class="check-square" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs hidden"></i></div>
                                 </div>
                             </td>
-                            <!-- ส่วนที่แก้ไข: เพิ่มข้อมูลแสดงผลช่องหมายเหตุเริ่มต้นในโค้ด -->
                             <td class="border border-slate-300 p-2">
                                 <input type="text" value="วางแนวนอนชั้นล่างสุด" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400">
                             </td>
@@ -359,13 +353,11 @@
                                 <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
-
                         <tr id="cat-row-2" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-2">
                             <td class="border border-slate-300 p-2 text-center">2</td>
                             <td colspan="7" class="border border-slate-300 p-2">หมวดที่ 2: อุปกรณ์เสริม / ของแถม (Accessories)</td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>
@@ -415,20 +407,22 @@
                 </div>
             </div>
 
+            <div class="mt-6 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm print-border">
+                <div class="text-xs text-slate-400 font-bold uppercase tracking-wide">หมายเหตุรวมประจำฟอร์ม (REMARKS):</div>
+                <div id="lbl-remarks" class="text-slate-800 whitespace-pre-wrap mt-1 font-medium">-</div>
+            </div>
+
             <div class="mt-8 border-t border-slate-300 pt-6">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ข้อกำหนดมาตรฐานการโหลดสินค้า (Logistics Standards)</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-500">
                     <div class="flex items-start gap-2">
-                        <i class="fa-solid fa-circle-check text-teal-600 mt-0.5"></i>
-                        <span><strong>แรปกันริ้วรอยชำรุด:</strong> ตัวสินค้าต้องได้รับการหุ้มพลาสติกแรปหนา 3 ชั้นเป็นอย่างน้อย โดยไม่มีฟองอากาศหรือรอยถลอก</span>
+                        <i class="fa-solid fa-circle-check text-teal-600 mt-0.5"></i> <span><strong>แรปกันริ้วรอยชำรุด:</strong> ตัวสินค้าต้องได้รับการหุ้มพลาสติกแรปหนา 3 ชั้นเป็นอย่างน้อย โดยไม่มีฟองอากาศหรือรอยถลอก</span>
                     </div>
                     <div class="flex items-start gap-2">
-                        <i class="fa-solid fa-circle-check text-teal-600 mt-0.5"></i>
-                        <span><strong>ป้องกันขอบมุมพิเศษ:</strong> เสริมกระดาษมุมหนา 4 ด้านของกล่องหรือพลาสติกหนากลุ่มมุมโซฟา เพื่อลดการกระแทกระหว่างเบียดตู้</span>
+                        <i class="fa-solid fa-circle-check text-teal-600 mt-0.5"></i> <span><strong>ป้องกันขอบมุมพิเศษ:</strong> เสริมกระดาษมุมหนา 4 ด้านของกล่องหรือพลาสติกหนากลุ่มมุมโซฟา เพื่อลดการกระแทกระหว่างเบียดตู้</span>
                     </div>
                     <div class="flex items-start gap-2">
-                        <i class="fa-solid fa-circle-check text-teal-600 mt-0.5"></i>
-                        <span><strong>ตรวจสอบบอร์ดเช็กของ:</strong> เมื่อพนักงานนำของขึ้นรถครบถ้วน ต้องใช้ปากกาติ๊กให้ครบทุกกล่อง หากไม่ครบห้ามปิดประตูตู้เด็ดขาด</span>
+                        <i class="fa-solid fa-circle-check text-teal-600 mt-0.5"></i> <span><strong>ตรวจสอบบอร์ดเช็กของ:</strong> เมื่อพนักงานนำของขึ้นรถครบถ้วน ต้องใช้ปากกาติ๊กให้ครบทุกกล่อง หากไม่ครบห้ามปิดประตูตู้เด็ดขาด</span>
                     </div>
                 </div>
             </div>
@@ -455,364 +449,325 @@
     </div>
 
     <script>
-        const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D"; 
+        const SUPABASE_URL = "https://wzsnwphomffvxtbksccu.supabase.co"; 
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6c253cGhvbWZmdnh0YmtzY2N1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODQwOTIsImV4cCI6MjAzMjQ1MDA5Mn0.8S-mI0Vb0A7Slyw2gI2R-8qZ1LzP-FmBlnX_fG-p_g0";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const currentUrlJob = urlParams.get('job');
         let isDriverMode = false;
 
-        async function initApp() {
-            if (currentUrlJob) {
+        function initApp() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('mode') && urlParams.get('mode') === 'driver') {
                 isDriverMode = true;
-                applyDriverViewRestrictions();
-                document.getElementById('cfg-job').value = currentUrlJob;
-                showNotification("กำลังเปิดลิงก์สำหรับพนักงานขับรถ...");
-                await loadSupabaseSheet(currentUrlJob);
-                updateLinkNotice(currentUrlJob);
+                document.body.classList.add('driver-mode');
+                document.getElementById('admin-control-bar').remove();
+                
+                const configs = document.querySelectorAll('.no-print');
+                configs.forEach(el => {
+                    if (el.id !== 'toast') el.remove();
+                });
+                
+                const deletes = document.querySelectorAll('.th-delete-column, .td-delete-column');
+                deletes.forEach(el => el.remove());
+                
+                const inputsInTable = document.querySelectorAll('#table-body input');
+                inputsInTable.forEach(inp => inp.disabled = true);
+            }
+            
+            syncHeader();
+            
+            if (!isDriverMode) {
+                const lastJob = localStorage.getItem('last_admin_job');
+                if (lastJob) {
+                    loadSupabaseSheet(lastJob);
+                }
             } else {
-                const savedAdminJob = localStorage.getItem('last_admin_job');
-                if (savedAdminJob) {
-                    document.getElementById('cfg-job').value = savedAdminJob;
-                    showNotification("กู้คืนข้อมูลเดิมก่อนรีเฟรชอัตโนมัติ...");
-                    await loadSupabaseSheet(savedAdminJob);
-                    updateLinkNotice(savedAdminJob);
-                } else {
-                    syncHeader();
+                const jobFromUrl = urlParams.get('job');
+                if (jobFromUrl) {
+                    loadSupabaseSheet(jobFromUrl);
                 }
             }
         }
-**************************************************
-        // ส่วนที่แก้ไข: จัดการเปิด/ปิดช่องกรอกกรณีเลือกสถานที่ระบุเอง
-        function handleLocationSelect(selectEl) {
+
+        function handleLocationSelect(selectObj) {
             const customInput = document.getElementById('cfg-location-custom');
-            if (selectEl.value === 'custom') {
+            if (selectObj.value === 'other') {
                 customInput.disabled = false;
                 customInput.classList.remove('bg-slate-100');
                 customInput.focus();
             } else {
-                customInput.disabled = true;
                 customInput.value = '';
+                customInput.disabled = true;
                 customInput.classList.add('bg-slate-100');
             }
             syncHeader();
         }
 
-        function applyDriverViewRestrictions() {
-            document.getElementById('admin-control-bar').classList.add('hidden');
-            document.getElementById('admin-config-fields').classList.add('pointer-events-none', 'opacity-80');
-            document.getElementById('admin-time-fields').classList.add('pointer-events-none', 'opacity-80');
-            document.getElementById('btn-add-row-main').classList.add('hidden');
-            document.getElementById('btn-copy-link').classList.add('hidden');
-            document.getElementById('btn-history-trigger').classList.add('hidden');
+        function syncHeader() {
+            if (isDriverMode) return;
+
+            document.getElementById('lbl-truck').innerText = document.getElementById('cfg-truck').value || '-';
+            document.getElementById('lbl-date').innerText = document.getElementById('cfg-date').value || '-';
+            document.getElementById('lbl-job').innerText = document.getElementById('cfg-job').value || '-';
+            document.getElementById('lbl-customer').innerText = document.getElementById('cfg-customer').value || '-';
+            document.getElementById('lbl-time-start').innerText = document.getElementById('cfg-time-start').value || '-';
+            document.getElementById('lbl-remarks').innerText = document.getElementById('cfg-remarks').value || '-';
+
+            // จัดการแสดงผลวันปล่อยรถ
+            const readyDispatchVal = document.getElementById('cfg-date-ready').value;
+            if (readyDispatchVal) {
+                const d = new Date(readyDispatchVal);
+                document.getElementById('lbl-time-end').innerText = d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+            } else {
+                document.getElementById('lbl-time-end').innerText = '-';
+            }
+
+            // จัดการสถานที่ขึ้นสินค้า
+            const selectLoc = document.getElementById('cfg-location-select');
+            if (selectLoc.value === 'other') {
+                document.getElementById('lbl-location').innerText = document.getElementById('cfg-location-custom').value || 'ระบุเอง';
+            } else {
+                document.getElementById('lbl-location').innerText = selectLoc.options[selectLoc.selectedIndex].text;
+            }
             
-            const deleteThs = document.querySelectorAll('.th-delete-column');
-            deleteThs.forEach(el => el.classList.add('hidden'));
-            const deleteTds = document.querySelectorAll('.td-delete-column');
-            deleteTds.forEach(el => el.classList.add('hidden'));
-
-            const actionGroup = document.getElementById('action-buttons-group');
-            actionGroup.className = "grid grid-cols-1 w-full";
-        }
-
-        function updateLinkNotice(jobNo) {
-            const driverUrl = window.location.origin + window.location.pathname + "?job=" + encodeURIComponent(jobNo);
-            document.getElementById('lbl-driver-url').innerText = driverUrl;
-            if (!isDriverMode) {
-                document.getElementById('link-notice-box').classList.remove('hidden');
-            }
-        }
-
-        function copyDriverLink() {
-            const jobNo = document.getElementById('cfg-job').value.trim();
-            if (!jobNo) {
-                showNotification("กรุณากรอกเลขที่จ๊อบก่อนสร้างลิงก์", false);
-                return;
-            }
-            const driverUrl = window.location.origin + window.location.pathname + "?job=" + encodeURIComponent(jobNo);
-            navigator.clipboard.writeText(driverUrl).then(() => {
-                showNotification("คัดลอกลิงก์สำหรับคนขับรถเรียบร้อย! ส่งต่อให้คนขับในไลน์ได้เลย");
-                updateLinkNotice(jobNo);
-            }).catch(() => {
-                showNotification("ไม่สามารถคัดลอกอัตโนมัติได้ ลิงก์คือ: " + driverUrl, false);
-            });
+            updateFormStatusLabel();
         }
 
         function setCurrentTime(inputId) {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById(inputId).value = `${hours}:${minutes}`;
+            const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false });
+            document.getElementById(inputId).value = timeStr;
             syncHeader();
-            showNotification("อัปเดตเวลาปัจจุบันสำเร็จ");
         }
 
-        // ส่วนที่แก้ไข: ดึงข้อมูลสถานที่ขึ้นของไปอัปเดตบนหัวฟอร์ม
-        function syncHeader() {
-            document.getElementById('lbl-truck').innerText = document.getElementById('cfg-truck').value || "-";
-            document.getElementById('lbl-date').innerText = document.getElementById('cfg-date').value || "-";
-            document.getElementById('lbl-job').innerText = document.getElementById('cfg-job').value || "-";
-            document.getElementById('lbl-customer').innerText = document.getElementById('cfg-customer').value || "-";
-            
-            const locationSelect = document.getElementById('cfg-location-select').value;
-            const locationCustom = document.getElementById('cfg-location-custom').value;
-            document.getElementById('lbl-location').innerText = (locationSelect === 'custom' ? locationCustom : locationSelect) || "ไม่ได้ระบุ";
-
-            const start = document.getElementById('cfg-time-start').value || "-";
-            const end = document.getElementById('cfg-time-end').value || "-";
-            document.getElementById('lbl-time-start').innerText = `${start} น.`;
-            document.getElementById('lbl-time-end').innerText = `${end} น.`;
+        function toggleSquare(el) {
+            el.classList.toggle('checked');
+            const icon = el.querySelector('i');
+            if (icon) icon.classList.toggle('hidden');
+            updateFormStatusLabel();
         }
 
-        function updateCheckboxes(inputElement) {
-            const row = inputElement.closest('tr');
-            const qty = parseInt(inputElement.value) || 1;
+        function updateCheckboxes(inputObj) {
+            const row = inputObj.closest('tr');
             const container = row.querySelector('.box-container');
-            
-            container.innerHTML = '';
-            for (let i = 0; i < qty; i++) {
-                const box = document.createElement('div');
-                box.className = "check-square";
-                box.setAttribute('onclick', 'toggleSquare(this)');
-                box.innerHTML = `<i class="fa-solid fa-check text-xs hidden"></i>`;
-                container.appendChild(box);
+            let targetQty = parseInt(inputObj.value) || 1;
+            if (targetQty < 1) { targetQty = 1; inputObj.value = 1; }
+
+            const currentBoxes = container.querySelectorAll('.check-square');
+            if (currentBoxes.length < targetQty) {
+                for (let i = currentBoxes.length; i < targetQty; i++) {
+                    const box = document.createElement('div');
+                    box.className = "check-square";
+                    box.onclick = function() { toggleSquare(this); };
+                    box.innerHTML = '<i class="fa-solid fa-check text-xs hidden"></i>';
+                    container.appendChild(box);
+                }
+            } else if (currentBoxes.length > targetQty) {
+                for (let i = currentBoxes.length - 1; i >= targetQty; i--) {
+                    currentBoxes[i].remove();
+                }
+            }
+            updateFormStatusLabel();
+        }
+
+        function updateFormStatusLabel() {
+            const allSquares = document.querySelectorAll('.check-square');
+            const checkedSquares = document.querySelectorAll('.check-square.checked');
+            const lblStatus = document.getElementById('lbl-status');
+
+            if (allSquares.length === 0) {
+                lblStatus.innerText = "ไม่มีรายการสินค้า";
+                lblStatus.className = "text-slate-400 font-semibold";
+                return;
+            }
+
+            if (checkedSquares.length === allSquares.length) {
+                lblStatus.innerText = "เช็กสินค้าครบถ้วน - พร้อมปล่อยรถ";
+                lblStatus.className = "text-teal-600 font-bold";
+            } else if (checkedSquares.length > 0) {
+                lblStatus.innerText = `กำลังลำเลียง (${checkedSquares.length}/${allSquares.length} ชิ้น)`;
+                lblStatus.className = "text-indigo-600 font-semibold";
+            } else {
+                lblStatus.innerText = "รอยืนยันข้อมูล";
+                lblStatus.className = "text-amber-600 font-semibold";
             }
         }
 
-        function toggleSquare(squareElement) {
-            const icon = squareElement.querySelector('i');
-            squareElement.classList.toggle('checked');
-            icon.classList.toggle('hidden');
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text
-                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
         function openAddRowModal() {
-            const mainJobs = document.getElementById('cfg-job').value.split(',')[0].trim();
-            document.getElementById('new-row-job').value = mainJobs || 'SOC-';
-            document.getElementById('new-row-name').value = '';
-            document.getElementById('new-row-spec').value = '';
-            document.getElementById('new-row-qty').value = '1';
-            document.getElementById('new-row-unit').value = 'ตัว';
-            document.getElementById('new-row-remark').value = ''; // เคลียร์ช่องหมายเหตุ
-            document.getElementById('new-row-image').value = '';
             document.getElementById('add-row-modal').classList.remove('hidden');
+            document.getElementById('new-row-job').value = document.getElementById('cfg-job').value.split(',')[0].trim();
         }
 
         function closeAddRowModal() {
             document.getElementById('add-row-modal').classList.add('hidden');
+            document.getElementById('new-row-name').value = '';
+            document.getElementById('new-row-spec').value = '';
+            document.getElementById('new-row-qty').value = '1';
+            document.getElementById('new-row-remark').value = '';
+            document.getElementById('new-row-image').value = '';
         }
 
-        function reIndexRows() {
-            const tbody = document.getElementById('table-body');
-            const rows = Array.from(tbody.querySelectorAll('tr'));
-            let indexes = { 'cat-1': 0, 'cat-2': 0 };
-
-            rows.forEach(row => {
-                const parentCat = row.getAttribute('data-parent-cat');
-                if (parentCat) {
-                    indexes[parentCat]++;
-                    const prefix = parentCat === 'cat-1' ? '1' : '2';
-                    row.cells[0].innerText = `${prefix}.${indexes[parentCat]}`;
-                }
-            });
-        }
-
-        // ส่วนที่แก้ไข: ดึงค่าและส่งค่าหมายเหตุ (Remark) ไปยังฟังก์ชัน Insert
         function submitNewRow() {
-            const rowJob = document.getElementById('new-row-job').value.trim() || 'N/A';
+            const job = document.getElementById('new-row-job').value.trim();
             const catId = document.getElementById('new-row-category').value;
             const name = document.getElementById('new-row-name').value.trim();
             const spec = document.getElementById('new-row-spec').value.trim();
             const qty = parseInt(document.getElementById('new-row-qty').value) || 1;
             const unit = document.getElementById('new-row-unit').value.trim() || 'ตัว';
             const remark = document.getElementById('new-row-remark').value.trim();
-            const imgInput = document.getElementById('new-row-image');
+            const imgFile = document.getElementById('new-row-image').files[0];
 
-            if (!name) {
-                showNotification("กรุณาระบุชื่อสินค้า", false);
+            if (!job || !name) {
+                showNotification("กรุณากรอกข้อมูล เลขที่จ๊อบ และ ชื่อสินค้า ให้ครบถ้วน", false);
                 return;
             }
 
-            if (imgInput.files && imgInput.files[0]) {
+            if (imgFile) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    compressImage(e.target.result, 120, 120, (compressedBase64) => {
-                        insertDispatchRow(rowJob, catId, name, spec, qty, unit, remark, compressedBase64);
-                    });
+                    appendRowToDOM(catId, job, name, spec, qty, unit, remark, e.target.result);
                 };
-                reader.readAsDataURL(imgInput.files[0]);
+                reader.readAsDataURL(imgFile);
             } else {
-                insertDispatchRow(rowJob, catId, name, spec, qty, unit, remark, null);
+                appendRowToDOM(catId, job, name, spec, qty, unit, remark, null);
             }
+
             closeAddRowModal();
+            showNotification("เพิ่มรายการสินค้าใหม่ลงตารางเรียบร้อย");
         }
 
-        function compressImage(base64Source, maxWidth, maxHeight, callback) {
-            const img = new Image();
-            img.src = base64Source;
-            img.onload = function() {
-                let width = img.width;
-                let height = img.height;
-                if (width > height) {
-                    if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-                } else {
-                    if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
-                }
-                const canvas = document.createElement('canvas');
-                canvas.width = width; canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                callback(canvas.toDataURL('image/jpeg', 0.7));
-            };
-        }
-
-        // ส่วนที่แก้ไข: ปรับปรุงโครงสร้างตารางตอน Insert ให้รองรับคอลัมน์หมายเหตุ
-        function insertDispatchRow(rowJob, catId, name, spec, qty, unit, remark, base64Image) {
+        function appendRowToDOM(catId, job, name, spec, qty, unit, remark, imgBase64) {
             const tbody = document.getElementById('table-body');
-            const newRow = document.createElement('tr');
-            newRow.className = "hover:bg-slate-50";
-            newRow.setAttribute('data-parent-cat', catId);
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const catRowIndex = rows.findIndex(r => r.id === `cat-row-${catId === 'cat-1' ? '1' : '2'}`);
+            
+            let insertBeforeTarget = null;
+            if (catId === 'cat-1') {
+                const nextCatIndex = rows.findIndex(r => r.id === 'cat-row-2');
+                insertBeforeTarget = rows[nextCatIndex];
+            }
 
-            let checkboxHtml = '';
+            const newTr = document.createElement('tr');
+            newTr.className = "hover:bg-slate-50";
+            newTr.setAttribute('data-parent-cat', catId);
+
+            let imgHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
+            if (imgBase64) {
+                imgHtml = `<img src="${imgBase64}" class="w-12 h-12 object-cover rounded border border-slate-200 cursor-zoom-in" onclick="window.open(this.src)">`;
+            }
+
+            let boxesHtml = '';
             for (let i = 0; i < qty; i++) {
-                checkboxHtml += `<div class="check-square" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs hidden"></i></div>`;
+                boxesHtml += '<div class="check-square" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs hidden"></i></div> ';
             }
 
-            let imageHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
-            if (base64Image) {
-                imageHtml = `<img src="${base64Image}" class="w-12 h-12 object-cover rounded border border-slate-200" alt="Product Preview">`;
-            }
-
-            newRow.innerHTML = `
-                <td class="border border-slate-300 p-2 text-center text-slate-500">#</td>
-                <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${escapeHtml(rowJob)}</td>
-                <td class="border border-slate-300 p-2 text-center flex justify-center items-center h-16">${imageHtml}</td>
+            newTr.innerHTML = `
+                <td class="border border-slate-300 p-2 text-center text-slate-500 index-cell">-</td>
+                <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${job}</td>
+                <td class="border border-slate-300 p-2 text-center">${imgHtml}</td>
                 <td class="border border-slate-300 p-2">
-                    <div class="font-semibold text-slate-800">${escapeHtml(name)}</div>
-                    <div class="text-xs text-slate-400">${escapeHtml(spec)}</div>
+                    <div class="font-semibold text-slate-800">${name}</div>
+                    <div class="text-xs text-slate-400">${spec || '-'}</div>
                 </td>
                 <td class="border border-slate-300 p-2 text-center font-bold text-teal-800 bg-teal-50/20">
-                    <input type="number" min="1" value="${qty}" oninput="updateCheckboxes(this)" class="w-12 text-center bg-transparent border-b border-transparent focus:outline-none focus:border-teal-500" ${isDriverMode ? 'disabled' : ''}>
+                    <input type="number" min="1" value="${qty}" oninput="updateCheckboxes(this)" class="w-12 text-center bg-transparent border-b border-transparent focus:outline-none focus:border-teal-500">
                 </td>
-                <td class="border border-slate-300 p-2 text-center text-slate-500">${escapeHtml(unit)}</td>
-                <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${checkboxHtml}</div></td>
-                <td class="border border-slate-300 p-2">
-                    <input type="text" value="${escapeHtml(remark)}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400" ${isDriverMode ? 'disabled' : ''}>
-                </td>
-                <td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}">
+                <td class="border border-slate-300 p-2 text-center text-slate-500">${unit}</td>
+                <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${boxesHtml}</div></td>
+                <td class="border border-slate-300 p-2"><input type="text" value="${remark}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400"></td>
+                <td class="td-delete-column border border-slate-300 p-2 text-center no-print">
                     <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             `;
 
-            const catHeaderRow = document.getElementById(`cat-row-${catId.split('-')[1]}`);
-            const childRows = Array.from(tbody.querySelectorAll(`tr[data-parent-cat="${catId}"]`));
-
-            if (childRows.length > 0) {
-                childRows[childRows.length - 1].after(newRow);
-            } else if (catHeaderRow) {
-                catHeaderRow.after(newRow);
+            if (insertBeforeTarget) {
+                tbody.insertBefore(newTr, insertBeforeTarget);
             } else {
-                tbody.appendChild(newRow);
+                tbody.appendChild(newTr);
             }
 
-            reIndexRows();
-            showNotification(`เพิ่มของ "${name}" เรียบร้อยแล้ว`);
+            reIndexTable();
         }
 
         function deleteRow(btn) {
-            btn.closest('tr').remove();
-            reIndexRows();
+            if (confirm("คุณแน่ใจไหมว่าต้องการลบสินค้าแถวนี้?")) {
+                btn.closest('tr').remove();
+                reIndexTable();
+                showNotification("ลบรายการสินค้าแล้ว");
+            }
         }
 
-        function getEvidenceImageBase64(elementId) {
-            const imgEl = document.getElementById(elementId);
-            if (imgEl && !imgEl.classList.contains('hidden') && imgEl.src && imgEl.src.startsWith('data:image')) {
-                return imgEl.src;
-            }
-            return imgEl ? imgEl.src : "";
+        function reIndexTable() {
+            const tbody = document.getElementById('table-body');
+            let c1 = 1, c2 = 1;
+            Array.from(tbody.children).forEach(tr => {
+                if (tr.id === 'cat-row-1' || tr.id === 'cat-row-2') return;
+                const pCat = tr.getAttribute('data-parent-cat');
+                const cell = tr.querySelector('.index-cell');
+                if (pCat === 'cat-1') {
+                    if (cell) cell.innerText = `1.${c1++}`;
+                } else {
+                    if (cell) cell.innerText = `2.${c2++}`;
+                }
+            });
+            updateFormStatusLabel();
         }
 
         function previewEvidenceImage(input, previewId) {
-            if (input.files && input.files[0]) {
+            const file = input.files[0];
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    compressImage(e.target.result, 600, 450, (compressedBase64) => {
-                        const img = document.getElementById(previewId);
-                        const infoContainer = input.closest('div').querySelector('.info-upload');
-                        img.src = compressedBase64;
-                        img.classList.remove('hidden');
-                        if (infoContainer) infoContainer.classList.add('hidden');
-                        showNotification("โหลดรูปหลักฐานเข้าฟอร์มสำเร็จ (อย่าลืมกดบันทึกข้อมูล)");
-                    });
+                    const img = document.getElementById(previewId);
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    input.closest('div').querySelector('.info-upload').classList.add('hidden');
                 };
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(file);
             }
         }
 
         function showNotification(msg, isSuccess = true) {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-msg');
-            const toastIcon = document.getElementById('toast-icon');
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').innerText = msg;
             
-            toastMsg.innerText = msg;
             if (isSuccess) {
-                toastIcon.className = "p-1 bg-teal-500/20 text-teal-400 rounded-full";
-                toastIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                icon.className = "p-1 bg-teal-500/20 text-teal-400 rounded-full";
+                icon.innerHTML = '<i class="fa-solid fa-check"></i>';
             } else {
-                toastIcon.className = "p-1 bg-amber-500/20 text-amber-400 rounded-full";
-                toastIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i>`;
+                icon.className = "p-1 bg-red-500/20 text-red-400 rounded-full";
+                icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
             }
-            
-            toast.className = "no-print fixed bottom-5 right-5 z-50 bg-slate-900 text-white py-3 px-5 rounded-xl shadow-xl border border-slate-800 flex items-center gap-3 transition-all duration-300 opacity-100 translate-y-0";
-            
+
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
             setTimeout(() => {
-                toast.className = "no-print fixed bottom-5 right-5 z-50 bg-slate-900 text-white py-3 px-5 rounded-xl shadow-xl border border-slate-800 flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-10 pointer-events-none";
-            }, 3000);
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }, 3500);
         }
 
-        function toggleHistoryModal(isOpen) {
-            const modal = document.getElementById('history-modal');
-            if (isOpen) {
-                renderSavedHistory();
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        }
-
-        // ส่วนที่แก้ไข: ดึงค่าจากช่อง Input หมายเหตุในแต่ละแถว เก็บลง JSON เพื่อส่งขึ้น Supabase
         function getSheetRowsData() {
+            const tbody = document.getElementById('table-body');
             const rows = [];
-            const trs = document.querySelectorAll('#table-body tr');
-            trs.forEach(tr => {
-                if (tr.id && tr.id.startsWith('cat-row-')) {
-                    rows.push({
-                        isCategory: true,
-                        num: tr.cells[0].innerText,
-                        name: tr.cells[1].innerText,
-                        catId: tr.getAttribute('data-cat-id')
-                    });
+            Array.from(tbody.children).forEach(tr => {
+                if (tr.id === 'cat-row-1') {
+                    rows.push({ isCategory: true, catId: 'cat-1', title: tr.children[1].innerText });
+                } else if (tr.id === 'cat-row-2') {
+                    rows.push({ isCategory: true, catId: 'cat-2', title: tr.children[1].innerText });
                 } else {
-                    const num = tr.cells[0].innerText;
-                    const itemJob = tr.cells[1].innerText;
-                    const parentCat = tr.getAttribute('data-parent-cat') || '';
-                    const imgEl = tr.cells[2].querySelector('img');
+                    const num = tr.querySelector('.index-cell') ? tr.querySelector('.index-cell').innerText : '';
+                    const itemJob = tr.children[1].innerText;
+                    const imgEl = tr.children[2].querySelector('img');
                     const imgBase64 = imgEl ? imgEl.src : null;
-                    const name = tr.cells[3].querySelector('.font-semibold').innerText;
-                    const spec = tr.cells[3].querySelector('.text-xs').innerText;
-                    const qty = tr.cells[4].querySelector('input').value;
-                    const unit = tr.cells[5].innerText;
-                    const checksState = Array.from(tr.querySelectorAll('.check-square')).map(sq => sq.classList.contains('checked'));
-                    const remark = tr.cells[7].querySelector('input').value; // ดึงค่าจาก input หมายเหตุ
+                    const name = tr.children[3].querySelector('.font-semibold').innerText;
+                    const spec = tr.children[3].querySelector('.text-slate-400').innerText;
+                    const qty = parseInt(tr.children[4].querySelector('input').value) || 1;
+                    const unit = tr.children[5].innerText;
+                    const parentCat = tr.getAttribute('data-parent-cat');
+                    const remark = tr.children[7].querySelector('input') ? tr.children[7].querySelector('input').value : '';
+
+                    const squares = tr.children[6].querySelectorAll('.check-square');
+                    const checksState = Array.from(squares).map(sq => sq.classList.contains('checked'));
 
                     rows.push({
                         isCategory: false, num: num, itemJob: itemJob, name: name, spec: spec,
@@ -822,9 +777,10 @@
             });
             return rows;
         }
-function getSheetDataSnapshot() {
+
+        function getSheetDataSnapshot() {
             const selectLoc = document.getElementById('cfg-location-select').value;
-            const finalLocation = selectLoc === 'custom' ? document.getElementById('cfg-location-custom').value : selectLoc;
+            const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
             
             return {
                 job: document.getElementById('cfg-job').value,
@@ -833,72 +789,21 @@ function getSheetDataSnapshot() {
                 customer_project: document.getElementById('cfg-customer').value,
                 loading_location: finalLocation,
                 time_start: document.getElementById('cfg-time-start').value,
-                time_end: document.getElementById('readyDispatchDate').value, // ดึงค่าจากช่องวันที่ปล่อยรถตัวใหม่
-                remarks: document.getElementById('formRemarks').value,        // ดึงค่าจากช่องหมายเหตุรวมตัวใหม่
+                time_end: document.getElementById('cfg-date-ready').value, 
+                remarks: document.getElementById('cfg-remarks').value,    
                 rows: getSheetRowsData()
             };
         }
 
-        // ส่วนที่แก้ไข: แนบตัวแปรสถานที่ขึ้นของ (Location ข้อมูลหลัก) ส่งขึ้น Cloud ด้วย
-        async function saveCurrentSheetToSupabase() {
-            const jobNo = document.getElementById('cfg-job').value.trim();
-            if (!jobNo) {
-                showNotification("กรุณาระบุเลขที่ใบงาน (Job No.) ก่อนจัดเก็บ", false);
-                return;
-            }
-
-            showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
-
-            const img1 = getEvidenceImageBase64('img-preview-1');
-            const img2 = getEvidenceImageBase64('img-preview-2');
-            const img3 = getEvidenceImageBase64('img-preview-3');
-            const img4 = getEvidenceImageBase64('img-preview-4');
-
-            const locationSelect = document.getElementById('cfg-location-select').value;
-            const locationCustom = document.getElementById('cfg-location-custom').value;
-            const finalLocation = locationSelect === 'custom' ? locationCustom : locationSelect;
-
-            const payload = {
-                job: jobNo,
-                customer: document.getElementById('cfg-customer').value,
-                truck: document.getElementById('cfg-truck').value,
-                delivery_date: document.getElementById('cfg-date').value,
-                time_start: document.getElementById('cfg-time-start').value,
-                time_end: document.getElementById('cfg-time-end').value,
-                location: finalLocation, // เพิ่มข้อมูลสถานที่หลัก
-                rows_data: getSheetRowsData(),
-                evidence_images: { img1, img2, img3, img4 }
-            };
-
-            const { data, error } = await _supabase
-                .from('dispatch_sheets')
-                .upsert(payload, { onConflict: 'job' });
-
-            if (error) {
-                console.error(error);
-                showNotification("เกิดข้อผิดพลาดในการบันทึกข้อมูล", false);
-            } else {
-                showNotification(`อัปเดตข้อมูลใบงาน ${jobNo} เรียบร้อยแล้ว!`);
-                document.getElementById('lbl-status').innerText = "ข้อมูลอัปเดตบนคลาวด์แล้ว";
-                document.getElementById('lbl-status').className = "text-teal-600 font-semibold";
-                
-                if (!isDriverMode) {
-                    localStorage.setItem('last_admin_job', jobNo);
-                }
-                updateLinkNotice(jobNo);
-            }
-        }
-
-        // ส่วนที่แก้ไข: ดึงข้อมูลประวัติ และ Map ข้อมูลสถานที่และหมายเหตุกลับเข้าโครงสร้างหน้าจอ
-       function applySheetDataSnapshot(snapshot) {
+        function applySheetDataSnapshot(snapshot) {
             if (!snapshot) return;
             document.getElementById('cfg-job').value = snapshot.job || '';
             document.getElementById('cfg-truck').value = snapshot.truck || '';
             document.getElementById('cfg-date').value = snapshot.delivery_date || '';
             document.getElementById('cfg-customer').value = snapshot.customer_project || '';
             document.getElementById('cfg-time-start').value = snapshot.time_start || '';
-            document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; // โหลดข้อมูลวันที่กลับเข้าช่องอินพุต
-            document.getElementById('cfg-remarks').value = snapshot.remarks || '';    // โหลดข้อมูลหมายเหตุกลับเข้าช่องข้อความ
+            document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; 
+            document.getElementById('cfg-remarks').value = snapshot.remarks || '';    
             
             const standardLocations = ['main_factory', 'warehouse_c2', 'warehouse_c7', 'showroom'];
             const selectLoc = document.getElementById('cfg-location-select');
@@ -920,141 +825,201 @@ function getSheetDataSnapshot() {
             syncHeader();
             updateFormStatusLabel();
         }
+
+        function renderTableRowsFromData(rowsArray) {
+            if (!rowsArray || rowsArray.length === 0) return;
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            const rows = snapshot.rows_data || snapshot.rows || [];
-            rows.forEach(row => {
+            rowsArray.forEach(row => {
                 if (row.isCategory) {
-                    const catRow = document.createElement('tr');
-                    catRow.id = `cat-row-${row.catId.split('-')[1]}`;
-                    catRow.setAttribute('data-cat-id', row.catId);
-                    catRow.className = "bg-slate-100 font-bold text-slate-800 print:bg-slate-50";
-                    catRow.innerHTML = `<td class="border border-slate-300 p-2 text-center">${row.num}</td><td colspan="7" class="border border-slate-300 p-2">${escapeHtml(row.name)}</td><td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}"></td>`;
-                    tbody.appendChild(catRow);
+                    const cTr = document.createElement('tr');
+                    cTr.id = `cat-row-${row.catId}`;
+                    cTr.className = "bg-slate-100 font-bold text-slate-800 print:bg-slate-50";
+                    cTr.innerHTML = `
+                        <td class="border border-slate-300 p-2 text-center">${row.catId === 'cat-1'?'1':'2'}</td>
+                        <td colspan="7" class="border border-slate-300 p-2">${row.title}</td>
+                        <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
+                    `;
+                    tbody.appendChild(cTr);
                 } else {
-                    const itemRow = document.createElement('tr');
-                    itemRow.className = "hover:bg-slate-50";
-                    itemRow.setAttribute('data-parent-cat', row.parentCat || '');
+                    const rTr = document.createElement('tr');
+                    rTr.className = "hover:bg-slate-50";
+                    rTr.setAttribute('data-parent-cat', row.parentCat);
 
-                    let checkboxHtml = '';
-                    const states = row.checksState || [];
-                    for (let i = 0; i < (parseInt(row.qty) || 1); i++) {
-                        const isChecked = states[i] ? 'checked' : '';
-                        const isHidden = states[i] ? '' : 'hidden';
-                        checkboxHtml += `<div class="check-square ${isChecked}" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs ${isHidden}"></i></div>`;
+                    let imgHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
+                    if (row.img) {
+                        imgHtml = `<img src="${row.img}" class="w-12 h-12 object-cover rounded border border-slate-200 cursor-zoom-in" onclick="window.open(this.src)">`;
                     }
 
-                    let imageHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
-                    if (row.img) { imageHtml = `<img src="${row.img}" class="w-12 h-12 object-cover rounded border border-slate-200" alt="Product Image">`; }
+                    let boxesHtml = '';
+                    if (row.checksState && row.checksState.length > 0) {
+                        row.checksState.forEach(isChecked => {
+                            boxesHtml += `<div class="check-square ${isChecked?'checked':''}" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs ${isChecked?'':'hidden'}"></i></div> `;
+                        });
+                    }
 
-                    // ใส่ค่า row.remark ที่ดึงมาลงใน value ของ input หมายเหตุ
-                    itemRow.innerHTML = `
-                        <td class="border border-slate-300 p-2 text-center text-slate-500">${row.num}</td>
-                        <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${escapeHtml(row.itemJob || '')}</td>
-                        <td class="border border-slate-300 p-2 text-center flex justify-center items-center h-16">${imageHtml}</td>
+                    rTr.innerHTML = `
+                        <td class="border border-slate-300 p-2 text-center text-slate-500 index-cell">${row.num}</td>
+                        <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${row.itemJob}</td>
+                        <td class="border border-slate-300 p-2 text-center">${imgHtml}</td>
                         <td class="border border-slate-300 p-2">
-                            <div class="font-semibold text-slate-800">${escapeHtml(row.name)}</div>
-                            <div class="text-xs text-slate-400">${escapeHtml(row.spec)}</div>
+                            <div class="font-semibold text-slate-800">${row.name}</div>
+                            <div class="text-xs text-slate-400">${row.spec || '-'}</div>
                         </td>
                         <td class="border border-slate-300 p-2 text-center font-bold text-teal-800 bg-teal-50/20">
-                            <input type="number" min="1" value="${row.qty}" oninput="updateCheckboxes(this)" class="w-12 text-center bg-transparent border-b border-transparent focus:outline-none focus:border-teal-500" ${isDriverMode ? 'disabled' : ''}>
+                            <input type="number" min="1" value="${row.qty}" oninput="updateCheckboxes(this)" class="w-12 text-center bg-transparent border-b border-transparent focus:outline-none focus:border-teal-500">
                         </td>
-                        <td class="border border-slate-300 p-2 text-center text-slate-500">${escapeHtml(row.unit)}</td>
-                        <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${checkboxHtml}</div></td>
-                        <td class="border border-slate-300 p-2">
-                            <input type="text" value="${escapeHtml(row.remark || '')}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400" ${isDriverMode ? 'disabled' : ''}>
-                        </td>
-                        <td class="td-delete-column border border-slate-300 p-2 text-center no-print ${isDriverMode ? 'hidden' : ''}">
+                        <td class="border border-slate-300 p-2 text-center text-slate-500">${row.unit}</td>
+                        <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${boxesHtml}</div></td>
+                        <td class="border border-slate-300 p-2"><input type="text" value="${row.remark || ''}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400"></td>
+                        <td class="td-delete-column border border-slate-300 p-2 text-center no-print">
                             <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
                     `;
-                    tbody.appendChild(itemRow);
+                    tbody.appendChild(rTr);
                 }
             });
-
-            const evidence = snapshot.evidence_images || snapshot.evidenceImages;
-            if (evidence) {
-                applyEvidenceImage('img-preview-1', evidence.img1);
-                applyEvidenceImage('img-preview-2', evidence.img2);
-                applyEvidenceImage('img-preview-3', evidence.img3);
-                applyEvidenceImage('img-preview-4', evidence.img4);
-            }
-            
-            document.getElementById('lbl-status').innerText = "โหลดจากคลาวด์แล้ว";
-            document.getElementById('lbl-status').className = "text-teal-600 font-semibold";
             
             if (isDriverMode) {
-                applyDriverViewRestrictions();
-            }
-            reIndexRows();
-        }
-
-        function applyEvidenceImage(elementId, src) {
-            const img = document.getElementById(elementId);
-            const container = img.closest('div');
-            const infoContainer = container.querySelector('.info-upload');
-            if (src && (src.startsWith('data:image') || src.startsWith('http'))) {
-                img.src = src; img.classList.remove('hidden');
-                if (infoContainer) infoContainer.classList.add('hidden');
-            } else {
-                img.src = ''; img.classList.add('hidden');
-                if (infoContainer) infoContainer.classList.remove('hidden');
+                initApp(); 
             }
         }
 
-        async function renderSavedHistory() {
-            const listContainer = document.getElementById('saved-list');
-            listContainer.innerHTML = `<div class="text-center py-8 text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-1"></i> กำลังเชื่อมต่อฐานข้อมูล...</div>`;
-            
-            const { data: saved, error } = await _supabase
-                .from('dispatch_sheets')
-                .select('job, truck, time_start, time_end, created_at')
-                .order('created_at', { ascending: false });
+        async function saveCurrentSheetToSupabase() {
+            const snapshot = getSheetDataSnapshot();
+            const primaryJob = snapshot.job.split(',')[0].trim();
 
-            if (error || !saved || saved.length === 0) {
-                listContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs"><i class="fa-solid fa-folder-open text-3xl mb-2 block text-slate-300"></i>ไม่มีประวัติในระบบคลาวด์</div>`;
+            if (!primaryJob) {
+                showNotification("กรุณาระบุเลขที่จ๊อบหลัก (Main Jobs) ก่อนบันทึก", false);
                 return;
             }
 
-            listContainer.innerHTML = saved.map(sheet => {
-                const dateLabel = sheet.created_at ? new Date(sheet.created_at).toLocaleString('th-TH') : '-';
-                return `
-                <div id="history-card-${sheet.job}" class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-3 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start">
-                            <span class="font-mono font-bold text-teal-700 text-sm truncate max-w-[180px]">${escapeHtml(sheet.job)}</span>
-                            <span class="text-[10px] text-slate-400 font-medium">${dateLabel}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 text-xs mt-1">ทะเบียน: ${escapeHtml(sheet.truck)}</h4>
+            // บันทึกหลักฐานรูปถ่าย QC ด้านล่าง
+            const base64Evidences = [];
+            for (let i = 1; i <= 4; i++) {
+                const img = document.getElementById(`img-preview-${i}`);
+                base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
+            }
+            snapshot.evidences = base64Evidences;
+
+            showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
+
+            const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob);
+            
+            let resultErr;
+            if (existing && existing.length > 0) {
+                const { error } = await _supabase.from('dispatch_sheets').update({
+                    truck: snapshot.truck,
+                    delivery_date: snapshot.delivery_date,
+                    customer_project: snapshot.customer_project,
+                    loading_location: snapshot.loading_location,
+                    time_start: snapshot.time_start,
+                    time_end: snapshot.time_end,
+                    remarks: snapshot.remarks,
+                    rows: snapshot.rows,
+                    evidences: snapshot.evidences
+                }).eq('job', primaryJob);
+                resultErr = error;
+            } else {
+                const { error } = await _supabase.from('dispatch_sheets').insert([{
+                    job: primaryJob,
+                    truck: snapshot.truck,
+                    delivery_date: snapshot.delivery_date,
+                    customer_project: snapshot.customer_project,
+                    loading_location: snapshot.loading_location,
+                    time_start: snapshot.time_start,
+                    time_end: snapshot.time_end,
+                    remarks: snapshot.remarks,
+                    rows: snapshot.rows,
+                    evidences: snapshot.evidences
+                }]);
+                resultErr = error;
+            }
+
+            if (resultErr) {
+                console.error(resultErr);
+                showNotification("เกิดข้อผิดพลาดในการเชื่อมต่อคลาวด์", false);
+            } else {
+                localStorage.setItem('last_admin_job', primaryJob);
+                showNotification(`บันทึกใบงานชุดจ๊อบ ${primaryJob} สำเร็จแล้ว!`);
+                generateDriverLinkDisplay(primaryJob);
+            }
+        }
+
+        function generateDriverLinkDisplay(jobNo) {
+            const baseUrl = window.location.href.split('?')[0];
+            const driverUrl = `${baseUrl}?mode=driver&job=${encodeURIComponent(jobNo)}`;
+            document.getElementById('lbl-driver-url').innerText = driverUrl;
+            document.getElementById('link-notice-box').classList.remove('hidden');
+        }
+
+        function copyDriverLink() {
+            const urlText = document.getElementById('lbl-driver-url').innerText;
+            if (!urlText) {
+                showNotification("ไม่พบลิงก์ กรุณากดปุ่มบันทึกข้อมูลก่อน", false);
+                return;
+            }
+            navigator.clipboard.writeText(urlText).then(() => {
+                showNotification("คัดลอกลิงก์สำหรับคนขับลงคลิปบอร์ดแล้ว!");
+            });
+        }
+
+        async function toggleHistoryModal(open) {
+            const modal = document.getElementById('history-modal');
+            if (open) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                await loadHistoryListFromSupabase();
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        async function loadHistoryListFromSupabase() {
+            const listDiv = document.getElementById('saved-list');
+            listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังดึงข้อมูลฐานคลาวด์...</div>';
+
+            const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer_project').order('created_at', { ascending: false });
+            
+            if (error || !data) {
+                listDiv.innerHTML = '<div class="text-center py-6 text-xs text-red-500">โหลดประวัติไม่สำเร็จ</div>';
+                return;
+            }
+
+            if (data.length === 0) {
+                listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-400">ไม่พบประวัติใบตรวจงานในฐานคลาวด์</div>';
+                return;
+            }
+
+            listDiv.innerHTML = '';
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.id = `history-card-${item.job}`;
+                card.className = "p-3 mb-2 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 flex justify-between items-center transition-all";
+                card.innerHTML = `
+                    <div class="truncate mr-2 cursor-pointer flex-grow" onclick="loadSupabaseSheet('${item.job}'); toggleHistoryModal(false);">
+                        <div class="font-mono font-bold text-sm text-indigo-700">JOB: ${item.job}</div>
+                        <div class="text-xs text-slate-700 font-semibold mt-0.5">${item.truck || 'ไม่ระบุรถ'}</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer_project || '-'}</div>
                     </div>
-                    <div class="flex gap-2 mt-3 border-t border-slate-100 pt-3">
-                        <button onclick="loadSupabaseSheet('${sheet.job}'); toggleHistoryModal(false);" class="flex-grow bg-teal-600 hover:bg-teal-500 text-white text-[11px] font-bold py-1.5 px-3 rounded-md transition-all flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-folder-open"></i> ดึงเปิดข้อมูล
-                        </button>
-                        <button onclick="deleteSheetFromSupabase('${sheet.job}')" class="bg-red-50 hover:bg-red-100 text-red-600 p-1.5 rounded-md border border-red-200 transition-all flex items-center justify-center" title="ลบใบงานนี้">
-                            <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
+                    <button onclick="deleteSheetFromSupabase('${item.job}')" class="text-slate-400 hover:text-red-500 p-2 shrink-0" title="ลบใบงานถาวร">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                `;
+                listDiv.appendChild(card);
+            });
         }
 
         async function deleteSheetFromSupabase(jobNo) {
-            if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบใบงานเลขที่ ${jobNo} ออกจากคลาวด์ถาวร?`)) {
-                return;
-            }
+            if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบใบงานเลขที่ ${jobNo} ออกจากคลาวด์ถาวร?`)) return;
             
-            const { error } = await _supabase
-                .from('dispatch_sheets')
-                .delete()
-                .eq('job', jobNo);
-
+            const { error } = await _supabase.from('dispatch_sheets').delete().eq('job', jobNo);
             if (error) {
-                console.error(error);
-                showNotification("ไม่สามารถลบข้อมูลได้ กรุณาตรวจสอบสิทธิ์ RLS", false);
+                showNotification("ไม่สามารถลบข้อมูลได้", false);
             } else {
-                showNotification(`ลบใบงาน ${jobNo} ออกจากคลาวด์สำเร็จแล้ว`);
+                showNotification(`ลบใบงาน ${jobNo} สำเร็จ`);
                 if (localStorage.getItem('last_admin_job') === jobNo) {
                     localStorage.removeItem('last_admin_job');
                 }
@@ -1067,12 +1032,33 @@ function getSheetDataSnapshot() {
             const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
             if (data && !error) {
                 applySheetDataSnapshot(data);
+                
+                // นำรูปภาพหลักฐานกลับคืนฟอร์ม
+                if (data.evidences && data.evidences.length > 0) {
+                    data.evidences.forEach((src, idx) => {
+                        const previewId = `img-preview-${idx + 1}`;
+                        const img = document.getElementById(previewId);
+                        const input = img ? img.closest('div').querySelector('input') : null;
+                        
+                        if (src && img) {
+                            img.src = src;
+                            img.classList.remove('hidden');
+                            img.closest('div').querySelector('.info-upload').classList.add('hidden');
+                        } else if (img) {
+                            img.src = '';
+                            img.classList.add('hidden');
+                            img.closest('div').querySelector('.info-upload').classList.remove('hidden');
+                        }
+                    });
+                }
+
                 if (!isDriverMode) {
                     localStorage.setItem('last_admin_job', jobNo);
+                    generateDriverLinkDisplay(jobNo);
                 }
                 showNotification(`โหลดข้อมูลใบงานจ๊อบ ${jobNo} สำเร็จ`);
             } else {
-                showNotification("ไม่พบข้อมูลจ๊อบนี้บนระบบคลาวด์", false);
+                showNotification("ไม่พบข้อมูลจ๊อบนี้บนคลาวด์", false);
             }
         }
 
