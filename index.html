@@ -485,54 +485,58 @@
         // ... (ฟังก์ชัน initApp, handleLocationSelect, syncHeader, ... คงเดิมไว้จนถึง saveCurrentSheetToSupabase)
 
         async function saveCurrentSheetToSupabase() {
-    const rawJob = document.getElementById('cfg-job').value;
-    const primaryJob = rawJob.split(',')[0].trim();
+            const rawJob = document.getElementById('cfg-job').value;
+            const primaryJob = rawJob.split(',')[0].trim();
 
-    if (!primaryJob) {
-        showNotification("กรุณาระบุเลขที่จ๊อบหลักก่อนบันทึก", false);
-        return;
-    }
+            if (!primaryJob) {
+                showNotification("กรุณาระบุเลขที่จ๊อบหลักก่อนบันทึก", false);
+                return;
+            }
 
-    showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
+            showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
 
-    // ดึงค่าสถานที่ (ถ้าเลือก 'other' ให้เอาค่าจากช่อง custom)
-    const selectLoc = document.getElementById('cfg-location-select').value;
-    const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
-    
-    // ดึงค่าหมายเหตุ
-    const remarksValue = document.getElementById('cfg-remarks').value;
+            const selectLoc = document.getElementById('cfg-location-select').value;
+            const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
+            
+            const base64Evidences = [];
+            for (let i = 1; i <= 4; i++) {
+                const img = document.getElementById(`img-preview-${i}`);
+                base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
+            }
 
-    const base64Evidences = [];
-    for (let i = 1; i <= 4; i++) {
-        const img = document.getElementById(`img-preview-${i}`);
-        base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
-    }
+            // เพิ่ม remarks และ location เข้าไปใน payload
+            const payload = {
+                job: primaryJob,
+                customer: document.getElementById('cfg-customer').value,
+                truck: document.getElementById('cfg-truck').value,
+                delivery_date: document.getElementById('cfg-date').value,
+                time_start: document.getElementById('cfg-time-start').value,
+                time_end: document.getElementById('cfg-date-ready').value || '',
+                remarks: document.getElementById('cfg-remarks').value || '',
+                location: finalLocation,
+                rows_data: getSheetRowsData(),
+                evidence_images: base64Evidences
+            };
 
-    const payload = {
-        job: primaryJob,
-        customer: document.getElementById('cfg-customer').value,
-        truck: document.getElementById('cfg-truck').value,
-        delivery_date: document.getElementById('cfg-date').value,
-        time_start: document.getElementById('cfg-time-start').value,
-        time_end: document.getElementById('cfg-time-end').value || '', // แก้จาก cfg-date-ready เป็น cfg-time-end ตามไฟล์คุณ
-        remarks: remarksValue,     // <--- เพิ่มตรงนี้
-        location: finalLocation,   // <--- เพิ่มตรงนี้
-        rows_data: getSheetRowsData(),
-        evidence_images: base64Evidences
-    };
+            try {
+                const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob);
+                
+                let resultErr;
+                if (existing && existing.length > 0) {
+                    const { error } = await _supabase.from('dispatch_sheets').update(payload).eq('job', primaryJob);
+                    resultErr = error;
+                } else {
+                    const { error } = await _supabase.from('dispatch_sheets').insert([{ job: primaryJob, ...payload }]);
+                    resultErr = error;
+                }
 
-    const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob).maybeSingle();
-    const { error } = existing 
-        ? await _supabase.from('dispatch_sheets').update(payload).eq('job', primaryJob)
-        : await _supabase.from('dispatch_sheets').insert([payload]);
-
-    if (error) { 
-        showNotification("บันทึกไม่สำเร็จ: " + error.message, false); 
-    } else { 
-        showNotification(`บันทึกจ๊อบ ${primaryJob} สำเร็จ!`); 
-        loadHistoryList(); 
-    }
-}catch (err) {
+                if (resultErr) {
+                    showNotification("บันทึกไม่สำเร็จ: " + resultErr.message, false);
+                } else {
+                    localStorage.setItem('last_admin_job', primaryJob);
+                    showNotification(`บันทึกจ๊อบ ${primaryJob} สำเร็จ!`);
+                }
+            } catch (err) {
                 showNotification("ระบบขัดข้อง", false);
             }
         }
@@ -563,7 +567,7 @@
             // ... (โค้ดจัดการรูปภาพคงเดิม)
             renderTableRowsFromData(snapshot.rows_data);
             syncHeader();
-        }****
+        }
 
         // ส่วนที่เหลือของฟังก์ชัน (renderTableRowsFromData, loadSupabaseSheet, ฯลฯ) ให้คงไว้เหมือนเดิมครับ
         const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
