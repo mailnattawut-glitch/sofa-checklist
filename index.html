@@ -473,13 +473,24 @@
             
             syncHeader();
             
-            if (!isDriverMode) {
-                const lastJob = localStorage.getItem('last_admin_job');
-                if (lastJob) loadSupabaseSheet(lastJob);
-            } else {
-                const jobFromUrl = urlParams.get('job');
-                if (jobFromUrl) loadSupabaseSheet(jobFromUrl);
-            }
+            if (isDriverMode) {
+    isDriverMode = true;
+    document.body.classList.add('driver-mode');
+    
+    // 1. ปลดล็อกเฉพาะช่องที่คนขับต้องพิมพ์ได้
+    const editableFields = ['cfg-remarks', 'cfg-location-select', 'cfg-location-custom'];
+    editableFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = false;
+    });
+
+    // 2. สร้างปุ่มบันทึกให้คนขับ (แทนที่แถบแอดมินที่ถูกลบไป)
+    const driverSaveBtn = document.createElement('button');
+    driverSaveBtn.innerText = "บันทึกข้อมูล (สำหรับคนขับ)";
+    driverSaveBtn.className = "fixed bottom-5 right-5 bg-teal-600 text-white p-4 rounded-xl shadow-2xl font-bold z-50";
+    driverSaveBtn.onclick = saveCurrentSheetToSupabase;
+    document.body.appendChild(driverSaveBtn);
+}
         }
 
         // ... (ฟังก์ชัน initApp, handleLocationSelect, syncHeader, ... คงเดิมไว้จนถึง saveCurrentSheetToSupabase)
