@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=1280">
     <title>ใบตรวจเช็กสินค้าขึ้นรถขนส่งโซฟา (Sofa Loading Checklist)</title>
     
-    <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -895,7 +895,7 @@
                 }
             });
         }
-*******
+
         async function saveCurrentSheetToSupabase() {
             const rawJob = document.getElementById('cfg-job').value;
             const primaryJob = rawJob.split(',')[0].trim();
@@ -1077,12 +1077,7 @@
 const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
 const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-// ----------------------------------------------------SUPABASE_URLSUPABASE_URL
-// --- ฟังก์ชันสำหรับคลาวด์ ---
- catch (err) {
-        showNotification("ดึงข้อมูลขัดข้อง", false);
-    }
-}
+
 // ----------------------------
         window.onload = initApp;
     </script>
