@@ -60,7 +60,6 @@
 
     <div class="max-w-6xl mx-auto space-y-6">
         
-        <!-- แผงหัวข้อหลัก -->
         <div id="admin-control-bar" class="no-print bg-slate-900 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <span class="bg-teal-500/20 text-teal-300 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">LOGISTICS & DISPATCH TOOL</span>
@@ -77,7 +76,6 @@
             </div>
         </div>
 
-        <!-- กล่องกรอกข้อมูลแอดมินสำหรับบันทึกคลาวด์และส่งค่าไปใบฟอร์ม -->
         <div class="no-print bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
             <div id="admin-config-fields" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
@@ -171,7 +169,6 @@
             <p id="toast-msg" class="text-xs font-medium m-0"></p>
         </div>
 
-        <!-- Modal เพิ่มของหลัก -->
         <div id="add-row-modal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 border border-slate-100">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-100 mb-4">
@@ -232,7 +229,6 @@
             </div>
         </div>
 
-        <!-- Modal ประวัติใบงาน -->
         <div id="history-modal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm justify-end flex transition-all">
             <div class="bg-white w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between ml-auto">
                 <div class="flex flex-col h-full">
@@ -255,7 +251,6 @@
             </div>
         </div>
 
-        <!-- ตัวหน้าฟอร์มแสดงผลจริงสำหรับพิมพ์ (A4) -->
         <div class="bg-white rounded-2xl p-6 md:p-10 shadow-sm border border-slate-200 print-shadow-none relative">
             
             <div class="flex justify-between items-start border-b-2 border-slate-900 pb-5 mb-6">
@@ -271,7 +266,6 @@
                 </div>
             </div>
 
-            <!-- กล่องข้อมูลตู้รถหลักบนหัวฟอร์ม -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-sm print-border">
                 <div>
                     <div class="text-xs text-slate-400 font-semibold uppercase">พนักงานขับรถ / ทะเบียนรถ:</div>
@@ -295,7 +289,6 @@
                 </div>
             </div>
 
-            <!-- กล่องแสดงเวลาขึ้นและปล่อยรถจริงบนฟอร์ม -->
             <div class="grid grid-cols-2 gap-4 bg-teal-50/40 p-4 rounded-xl border border-teal-100 mb-6 text-sm print-border">
                 <div>
                     <div class="text-xs text-teal-600 font-bold uppercase tracking-wide flex items-center gap-1.5">
@@ -311,7 +304,6 @@
                 </div>
             </div>
 
-            <!-- ตารางแสดงรายการสินค้า -->
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse border border-slate-200 text-sm" id="dispatch-table">
                     <thead>
@@ -370,7 +362,6 @@
                 </table>
             </div>
 
-            <!-- กล่องแสดงภาพถ่ายหลักฐานประจำใบงาน -->
             <div class="mt-8 border-t border-slate-300 pt-6">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-camera-retro text-teal-600"></i> หลักฐานภาพถ่ายการตรวจสอบและส่งของขึ้นรถ (Loading QC Photo Evidence)
@@ -416,13 +407,11 @@
                 </div>
             </div>
 
-            <!-- กล่องแสดงข้อความหมายเหตุรวมใต้รูป QC ของใบฟอร์มจริง -->
             <div class="mt-6 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm print-border">
                 <div class="text-xs text-slate-400 font-bold uppercase tracking-wide">หมายเหตุรวมประจำฟอร์ม (REMARKS):</div>
                 <div id="lbl-remarks" class="text-slate-800 whitespace-pre-wrap mt-1 font-medium">-</div>
             </div>
 
-            <!-- ท้ายกระดาษลงชื่อฟอร์ม -->
             <div class="mt-8 border-t border-slate-300 pt-6">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ข้อกำหนดมาตรฐานการโหลดสินค้า (Logistics Standards)</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-500">
@@ -459,7 +448,6 @@
         </div>
     </div>
 
-    <!-- ลิงก์เชื่อมฐานข้อมูลและสคริปต์ควบคุม -->
     <script>
         const SUPABASE_URL = "https://wzsnwphomffvxtbksccu.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6c253cGhvbWZmdnh0YmtzY2N1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODQwOTIsImV4cCI6MjAzMjQ1MDA5Mn0.8S-mI0Vb0A7Slyw2gI2R-8qZ1LzP-FmBlnX_fG-p_g0";
@@ -516,8 +504,7 @@
         }
 
         function syncHeader() {
-            if (isDriverMode) return;
-
+            // ดึงค่ามาแสดงผลสดๆ ฝั่งขวาทันทีโดยไม่ต้องรอเซฟคลาวด์เสร็จ
             document.getElementById('lbl-truck').innerText = document.getElementById('cfg-truck').value || '-';
             document.getElementById('lbl-date').innerText = document.getElementById('cfg-date').value || '-';
             document.getElementById('lbl-job').innerText = document.getElementById('cfg-job').value || '-';
@@ -534,9 +521,9 @@
             }
 
             const selectLoc = document.getElementById('cfg-location-select');
-            if (selectLoc.value === 'other') {
+            if (selectLoc && selectLoc.value === 'other') {
                 document.getElementById('lbl-location').innerText = document.getElementById('cfg-location-custom').value || 'ระบุเอง';
-            } else {
+            } else if (selectLoc) {
                 document.getElementById('lbl-location').innerText = selectLoc.options[selectLoc.selectedIndex].text;
             }
             
@@ -649,7 +636,6 @@
         function appendRowToDOM(catId, job, name, spec, qty, unit, remark, imgBase64) {
             const tbody = document.getElementById('table-body');
             const rows = Array.from(tbody.querySelectorAll('tr'));
-            const catRowIndex = rows.findIndex(r => r.id === `cat-row-${catId === 'cat-1' ? '1' : '2'}`);
             
             let insertBeforeTarget = null;
             if (catId === 'cat-1') {
@@ -739,6 +725,7 @@
 
         function showNotification(msg, isSuccess = true) {
             const toast = document.getElementById('toast');
+            if(!toast) return;
             const icon = document.getElementById('toast-icon');
             document.getElementById('toast-msg').innerText = msg;
             
@@ -759,6 +746,7 @@
         function getSheetRowsData() {
             const tbody = document.getElementById('table-body');
             const rows = [];
+            if(!tbody) return rows;
             Array.from(tbody.children).forEach(tr => {
                 if (tr.id === 'cat-row-1') {
                     rows.push({ isCategory: true, catId: 'cat-1', title: tr.children[1].innerText });
@@ -788,41 +776,17 @@
             return rows;
         }
 
-        function getSheetDataSnapshot() {
-            const selectLoc = document.getElementById('cfg-location-select').value;
-            const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
-            
-            const base64Evidences = [];
-            for (let i = 1; i <= 4; i++) {
-                const img = document.getElementById(`img-preview-${i}`);
-                base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
-            }
-
-            return {
-                job: document.getElementById('cfg-job').value,
-                truck: document.getElementById('cfg-truck').value,
-                delivery_date: document.getElementById('cfg-date').value,
-                customer: document.getElementById('cfg-customer').value,
-                loading_location: finalLocation,
-                time_start: document.getElementById('cfg-time-start').value,
-                time_end: document.getElementById('cfg-date-ready').value, 
-                remarks: document.getElementById('cfg-remarks').value,    
-                rows: getSheetRowsData(),
-                evidences_pack: base64Evidences 
-            };
-        }
-
         function applySheetDataSnapshot(snapshot) {
             if (!snapshot) return;
             
-            // คืนค่าฟิลด์หลัก ๆ ลงในหน้าจอกล่องแอดมิน
             document.getElementById('cfg-job').value = snapshot.job || '';
             document.getElementById('cfg-truck').value = snapshot.truck || '';
             document.getElementById('cfg-date').value = snapshot.delivery_date || '';
-            document.getElementById('cfg-customer').value = snapshot.customer || ''; 
+            
+            // ปรับแมปค่าให้ตรงกับคอลัมน์ดั้งเดิมของตารางฐานข้อมูลหลัก
+            document.getElementById('cfg-customer').value = snapshot.customer_project || snapshot.customer || ''; 
             document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; 
 
-            // คืนค่าข้อมูลเมทาดาต้าพิเศษ (เวลาขึ้นของ, หมายเหตุ, สถานที่ และรูปถ่ายหลักฐาน)
             if (snapshot.rows_metadata) {
                 document.getElementById('cfg-time-start').value = snapshot.rows_metadata.time_start || '08:30';
                 document.getElementById('cfg-remarks').value = snapshot.rows_metadata.remarks || '';
@@ -833,50 +797,55 @@
                 const standardLocations = ['main_factory', 'warehouse_c2', 'warehouse_c7', 'showroom'];
                 
                 if (standardLocations.includes(savedLoc)) {
-                    selectLoc.value = savedLoc;
-                    customInput.value = '';
-                    customInput.disabled = true;
-                    customInput.classList.add('bg-slate-100');
+                    if(selectLoc) selectLoc.value = savedLoc;
+                    if(customInput) {
+                        customInput.value = '';
+                        customInput.disabled = true;
+                        customInput.classList.add('bg-slate-100');
+                    }
                 } else {
-                    selectLoc.value = 'other';
-                    customInput.value = savedLoc;
-                    customInput.disabled = false;
-                    customInput.classList.remove('bg-slate-100');
+                    if(selectLoc) selectLoc.value = 'other';
+                    if(customInput) {
+                        customInput.value = savedLoc;
+                        customInput.disabled = false;
+                        customInput.classList.remove('bg-slate-100');
+                    }
                 }
 
-                // โหลดคืนรูปถ่ายหลักฐาน QC ทั้ง 4 ช่อง
                 const evPics = snapshot.rows_metadata.evidences_pack || [];
                 for (let i = 1; i <= 4; i++) {
                     const img = document.getElementById(`img-preview-${i}`);
-                    if (evPics[i-1]) {
+                    if (img && evPics[i-1]) {
                         img.src = evPics[i-1];
                         img.classList.remove('hidden');
                         img.closest('div').querySelector('.info-upload').classList.add('hidden');
-                    } else {
+                    } else if (img) {
                         img.classList.add('hidden');
                         img.closest('div').querySelector('.info-upload').classList.remove('hidden');
                     }
                 }
             } else {
-                // กรณีโหลดข้อมูลดิบชุดเก่า
                 document.getElementById('cfg-time-start').value = '08:30';
                 document.getElementById('cfg-remarks').value = '';
-                document.getElementById('cfg-location-select').value = 'main_factory';
+                if(document.getElementById('cfg-location-select')) document.getElementById('cfg-location-select').value = 'main_factory';
                 
                 for (let i = 1; i <= 4; i++) {
-                    document.getElementById(`img-preview-${i}`).classList.add('hidden');
-                    document.getElementById(`img-preview-${i}`).closest('div').querySelector('.info-upload').classList.remove('hidden');
+                    const img = document.getElementById(`img-preview-${i}`);
+                    if(img) {
+                        img.classList.add('hidden');
+                        img.closest('div').querySelector('.info-upload').classList.remove('hidden');
+                    }
                 }
             }
             
             renderTableRowsFromData(snapshot.rows);
             syncHeader();
-            updateFormStatusLabel();
         }
 
         function renderTableRowsFromData(rowsArray) {
             if (!rowsArray || rowsArray.length === 0) return;
             const tbody = document.getElementById('table-body');
+            if(!tbody) return;
             tbody.innerHTML = '';
 
             rowsArray.forEach(row => {
@@ -928,14 +897,9 @@
                     tbody.appendChild(rTr);
                 }
             });
-            
-            if (isDriverMode) {
-                initApp(); 
-            }
         }
 
         async function saveCurrentSheetToSupabase() {
-            // ดึงค่าตรง ๆ ป้องกันการ Error Crash จากโครงสร้าง Payload
             const rawJob = document.getElementById('cfg-job').value;
             const primaryJob = rawJob.split(',')[0].trim();
 
@@ -955,16 +919,16 @@
                 base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
             }
 
-            // จัดโครงสร้างส่งไปตารางคลาวด์ให้ถูกสเปกเป๊ะ ๆ
+            // แมปข้อมูลจัดรูปฟิลด์ให้ถูกต้องตามสเปกโครงสร้างตู้ฐานข้อมูลเดิม ป้องกันโดน Reject
             const payload = {
                 truck: document.getElementById('cfg-truck').value,
                 delivery_date: document.getElementById('cfg-date').value,
-                customer: document.getElementById('cfg-customer').value, 
-                time_end: document.getElementById('cfg-date-ready').value || '', 
+                customer_project: document.getElementById('cfg-customer').value, 
                 rows: getSheetRowsData(), 
                 rows_metadata: {
                     loading_location: finalLocation,
                     time_start: document.getElementById('cfg-time-start').value,
+                    time_end: document.getElementById('cfg-date-ready').value || '',
                     remarks: document.getElementById('cfg-remarks').value,
                     evidences_pack: base64Evidences
                 }
@@ -984,49 +948,51 @@
 
                 if (resultErr) {
                     console.error(resultErr);
-                    showNotification("เกิดข้อผิดพลาดในการบันทึก ตรวจสอบสิทธิ์ตาราง", false);
+                    showNotification("บันทึกไม่สำเร็จ ตรวจสอบความถูกต้องคอลัมน์ตาราง", false);
                 } else {
                     localStorage.setItem('last_admin_job', primaryJob);
-                    showNotification(`บันทึกใบงานชุดจ๊อบ ${primaryJob} สำเร็จ!`);
+                    showNotification(`บันทึกใบงานชุดจ๊อบ ${primaryJob} สำเร็จเรียบร้อย!`);
                     generateDriverLinkDisplay(primaryJob);
                 }
             } catch (err) {
                 console.error(err);
-                showNotification("ระบบขัดข้อง ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต", false);
+                showNotification("ระบบขัดข้องทางเครือข่าย", false);
             }
         }
 
         function generateDriverLinkDisplay(jobNo) {
             const baseUrl = window.location.href.split('?')[0];
             const driverUrl = `${baseUrl}?mode=driver&job=${encodeURIComponent(jobNo)}`;
-            document.getElementById('lbl-driver-url').innerText = driverUrl;
-            document.getElementById('link-notice-box').classList.remove('hidden');
+            const urlLbl = document.getElementById('lbl-driver-url');
+            const noticeBox = document.getElementById('link-notice-box');
+            if(urlLbl) urlLbl.innerText = driverUrl;
+            if(noticeBox) noticeBox.classList.remove('hidden');
         }
 
         function copyDriverLink() {
-            const urlText = document.getElementById('lbl-driver-url').innerText;
-            if (!urlText) {
-                // หากหน้าจอโล่ง ลองใช้ค่าจากจ๊อบปัจจุบันที่มีเพื่อสร้างลิงก์ให้เลยทันที
-                const rawJob = document.getElementById('cfg-job').value;
-                const primaryJob = rawJob.split(',')[0].trim();
-                if (primaryJob) {
-                    generateDriverLinkDisplay(primaryJob);
-                    const retryUrlText = document.getElementById('lbl-driver-url').innerText;
-                    navigator.clipboard.writeText(retryUrlText).then(() => {
-                        showNotification("สร้างลิงก์อัตโนมัติและคัดลอกลงคลิปบอร์ดแล้ว!");
-                    });
-                } else {
-                    showNotification("ไม่พบข้อมูลจ๊อบ กรุณาระบุเลขจ๊อบหรือเซฟข้อมูลก่อนคัดลอก", false);
-                }
+            const rawJob = document.getElementById('cfg-job').value;
+            const primaryJob = rawJob.split(',')[0].trim();
+            
+            if (!primaryJob) {
+                showNotification("ไม่พบข้อมูลจ๊อบหลัก กรุณาระบุเลขจ๊อบก่อนคัดลอกลิงก์", false);
                 return;
             }
-            navigator.clipboard.writeText(urlText).then(() => {
-                showNotification("คัดลอกลิงก์สำหรับคนขับลงคลิปบอร์ดแล้ว!");
+
+            // ปลั๊กอินสร้างลิงก์สดให้ทันทีโดยไม่ต้องง้อการหน่วงเวลาดึงข้อความบนหน้าจอ
+            const baseUrl = window.location.href.split('?')[0];
+            const driverUrl = `${baseUrl}?mode=driver&job=${encodeURIComponent(primaryJob)}`;
+            
+            navigator.clipboard.writeText(driverUrl).then(() => {
+                generateDriverLinkDisplay(primaryJob);
+                showNotification("คัดลอกลิงก์สำหรับคนขับรถลงคลิปบอร์ดแล้ว!");
+            }).catch(err => {
+                showNotification("ไม่สามารถคัดลอกได้อัตโนมัติ กรุณาลองอีกครั้ง", false);
             });
         }
 
         async function toggleHistoryModal(open) {
             const modal = document.getElementById('history-modal');
+            if(!modal) return;
             if (open) {
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
@@ -1039,10 +1005,11 @@
 
         async function loadHistoryListFromSupabase() {
             const listDiv = document.getElementById('saved-list');
+            if(!listDiv) return;
             listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังดึงข้อมูลฐานคลาวด์...</div>';
 
             try {
-                const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer').order('job', { ascending: false });
+                const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer_project').order('job', { ascending: false });
                 
                 if (error || !data) {
                     console.error(error);
@@ -1064,7 +1031,7 @@
                         <div class="truncate mr-2 cursor-pointer flex-grow" onclick="loadSupabaseSheet('${item.job}'); toggleHistoryModal(false);">
                             <div class="font-mono font-bold text-sm text-indigo-700">JOB: ${item.job}</div>
                             <div class="text-xs text-slate-700 font-semibold mt-0.5">${item.truck || 'ไม่ระบุรถ'}</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer || '-'}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer_project || '-'}</div>
                         </div>
                         <button onclick="deleteSheetFromSupabase('${item.job}')" class="text-slate-400 hover:text-red-500 p-2 shrink-0" title="ลบใบงานถาวร">
                             <i class="fa-solid fa-trash-can text-sm"></i>
