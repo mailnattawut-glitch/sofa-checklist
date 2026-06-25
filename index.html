@@ -532,44 +532,39 @@
         showNotification(`บันทึกจ๊อบ ${primaryJob} สำเร็จ!`); 
         loadHistoryList(); 
     }
-} catch (err) {
+}catch (err) {
                 showNotification("ระบบขัดข้อง", false);
             }
         }
 
         function applySheetDataSnapshot(snapshot) {
-    if (!snapshot) return;
-    
-    document.getElementById('cfg-job').value = snapshot.job || '';
-    document.getElementById('cfg-truck').value = snapshot.truck || '';
-    document.getElementById('cfg-date').value = snapshot.delivery_date || '';
-    document.getElementById('cfg-customer').value = snapshot.customer || '';
-    document.getElementById('cfg-time-end').value = snapshot.time_end || '';
-    document.getElementById('cfg-time-start').value = snapshot.time_start || '';
-    
-    // โหลดหมายเหตุ
-    document.getElementById('cfg-remarks').value = snapshot.remarks || '';
-    
-    // โหลดสถานที่
-    const selectLoc = document.getElementById('cfg-location-select');
-    const customLoc = document.getElementById('cfg-location-custom');
-    if (selectLoc) {
-        // เช็คว่าสถานที่ที่เซฟไว้มีในตัวเลือกไหม
-        const optionExists = Array.from(selectLoc.options).some(o => o.value === snapshot.location);
-        if (optionExists) {
-            selectLoc.value = snapshot.location;
-            customLoc.value = '';
-            customLoc.disabled = true;
-        } else {
-            selectLoc.value = 'other';
-            customLoc.disabled = false;
-            customLoc.value = snapshot.location || '';
-        }
-    }
+            if (!snapshot) return;
+            
+            document.getElementById('cfg-job').value = snapshot.job || '';
+            document.getElementById('cfg-truck').value = snapshot.truck || '';
+            document.getElementById('cfg-date').value = snapshot.delivery_date || '';
+            document.getElementById('cfg-customer').value = snapshot.customer || '';
+            document.getElementById('cfg-date-ready').value = snapshot.time_end || '';
+            document.getElementById('cfg-time-start').value = snapshot.time_start || '08:30';
+            
+            // เพิ่มการโหลดค่า remarks และ location กลับมาที่หน้าจอ
+            document.getElementById('cfg-remarks').value = snapshot.remarks || '';
+            const selectLoc = document.getElementById('cfg-location-select');
+            if (selectLoc) {
+                if (['main_factory', 'warehouse_b'].includes(snapshot.location)) {
+                    selectLoc.value = snapshot.location;
+                    document.getElementById('cfg-location-custom').value = '';
+                } else {
+                    selectLoc.value = 'other';
+                    document.getElementById('cfg-location-custom').value = snapshot.location || '';
+                }
+            }
 
-    renderTableRowsFromData(snapshot.rows_data);
-    syncHeader();
-}
+            // ... (โค้ดจัดการรูปภาพคงเดิม)
+            renderTableRowsFromData(snapshot.rows_data);
+            syncHeader();
+        }****
+
         // ส่วนที่เหลือของฟังก์ชัน (renderTableRowsFromData, loadSupabaseSheet, ฯลฯ) ให้คงไว้เหมือนเดิมครับ
         const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
         const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
