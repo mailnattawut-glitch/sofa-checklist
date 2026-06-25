@@ -448,13 +448,10 @@
         </div>
     </div>
 
-    <script>// --- ส่วนเชื่อมต่อ SUPABASE ที่ถูกต้อง ---
-const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
-const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D"; // รหัสของคุณพี่ตัวเดิมเลยครับ
-
-// ให้เหลือบรรทัดนี้บรรทัดเดียว (ห้ามมีบรรทัด const supabase ซ้ำซ้อน)
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-// -------------------------------------
+    <script>/ 1. ตั้งค่าการเชื่อมต่อฐานข้อมูล Supabase ของคุณ
+        const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let isDriverMode = false;
 
