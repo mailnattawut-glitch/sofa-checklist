@@ -323,7 +323,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr id="cat-row-1" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-1">
+                        <tr id="cat-1" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-1">
                             <td class="border border-slate-300 p-2 text-center">1</td>
                             <td colspan="7" class="border border-slate-300 p-2">หมวดที่ 1: รายการตัวโซฟาหลัก (Sofa Units)</td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
@@ -356,7 +356,7 @@
                                 <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
-                        <tr id="cat-row-2" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-2">
+                        <tr id="cat-2" class="bg-slate-100 font-bold text-slate-800 print:bg-slate-50" data-cat-id="cat-2">
                             <td class="border border-slate-300 p-2 text-center">2</td>
                             <td colspan="7" class="border border-slate-300 p-2">หมวดที่ 2: อุปกรณ์เสริม / ของแถม (Accessories)</td>
                             <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
@@ -638,7 +638,7 @@
             
             let insertBeforeTarget = null;
             if (catId === 'cat-1') {
-                const nextCatIndex = rows.findIndex(r => r.id === 'cat-row-2');
+                const nextCatIndex = rows.findIndex(r => r.id === 'cat-2');
                 insertBeforeTarget = rows[nextCatIndex];
             }
 
@@ -696,7 +696,7 @@
             const tbody = document.getElementById('table-body');
             let c1 = 1, c2 = 1;
             Array.from(tbody.children).forEach(tr => {
-                if (tr.id === 'cat-row-1' || tr.id === 'cat-row-2') return;
+                if (tr.id === 'cat-1' || tr.id === 'cat-2') return;
                 const pCat = tr.getAttribute('data-parent-cat');
                 const cell = tr.querySelector('.index-cell');
                 if (pCat === 'cat-1') {
@@ -747,9 +747,9 @@
             const rows = [];
             if(!tbody) return rows;
             Array.from(tbody.children).forEach(tr => {
-                if (tr.id === 'cat-row-1') {
+                if (tr.id === 'cat-1') {
                     rows.push({ isCategory: true, catId: 'cat-1', title: tr.children[1].innerText });
-                } else if (tr.id === 'cat-row-2') {
+                } else if (tr.id === 'cat-2') {
                     rows.push({ isCategory: true, catId: 'cat-2', title: tr.children[1].innerText });
                 } else {
                     const num = tr.querySelector('.index-cell') ? tr.querySelector('.index-cell').innerText : '';
@@ -848,7 +848,7 @@
             rowsArray.forEach(row => {
                 if (row.isCategory) {
                     const cTr = document.createElement('tr');
-                    cTr.id = `cat-row-${row.catId}`;
+                    cTr.id = row.catId;
                     cTr.className = "bg-slate-100 font-bold text-slate-800 print:bg-slate-50";
                     cTr.innerHTML = `
                         <td class="border border-slate-300 p-2 text-center">${row.catId === 'cat-1'?'1':'2'}</td>
