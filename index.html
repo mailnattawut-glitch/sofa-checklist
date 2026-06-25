@@ -60,6 +60,7 @@
 
     <div class="max-w-6xl mx-auto space-y-6">
         
+        <!-- แผงหัวข้อหลัก -->
         <div id="admin-control-bar" class="no-print bg-slate-900 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <span class="bg-teal-500/20 text-teal-300 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">LOGISTICS & DISPATCH TOOL</span>
@@ -76,6 +77,7 @@
             </div>
         </div>
 
+        <!-- กล่องกรอกข้อมูลแอดมินสำหรับบันทึกคลาวด์และส่งค่าไปใบฟอร์ม -->
         <div class="no-print bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
             <div id="admin-config-fields" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
@@ -169,6 +171,7 @@
             <p id="toast-msg" class="text-xs font-medium m-0"></p>
         </div>
 
+        <!-- Modal เพิ่มของหลัก -->
         <div id="add-row-modal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
             <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 border border-slate-100">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-100 mb-4">
@@ -229,6 +232,7 @@
             </div>
         </div>
 
+        <!-- Modal ประวัติใบงาน -->
         <div id="history-modal" class="no-print fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm justify-end flex transition-all">
             <div class="bg-white w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between ml-auto">
                 <div class="flex flex-col h-full">
@@ -251,6 +255,7 @@
             </div>
         </div>
 
+        <!-- ตัวหน้าฟอร์มแสดงผลจริงสำหรับพิมพ์ (A4) -->
         <div class="bg-white rounded-2xl p-6 md:p-10 shadow-sm border border-slate-200 print-shadow-none relative">
             
             <div class="flex justify-between items-start border-b-2 border-slate-900 pb-5 mb-6">
@@ -266,6 +271,7 @@
                 </div>
             </div>
 
+            <!-- กล่องข้อมูลตู้รถหลักบนหัวฟอร์ม -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 text-sm print-border">
                 <div>
                     <div class="text-xs text-slate-400 font-semibold uppercase">พนักงานขับรถ / ทะเบียนรถ:</div>
@@ -289,6 +295,7 @@
                 </div>
             </div>
 
+            <!-- กล่องแสดงเวลาขึ้นและปล่อยรถจริงบนฟอร์ม -->
             <div class="grid grid-cols-2 gap-4 bg-teal-50/40 p-4 rounded-xl border border-teal-100 mb-6 text-sm print-border">
                 <div>
                     <div class="text-xs text-teal-600 font-bold uppercase tracking-wide flex items-center gap-1.5">
@@ -304,6 +311,7 @@
                 </div>
             </div>
 
+            <!-- ตารางแสดงรายการสินค้า -->
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse border border-slate-200 text-sm" id="dispatch-table">
                     <thead>
@@ -362,6 +370,7 @@
                 </table>
             </div>
 
+            <!-- กล่องแสดงภาพถ่ายหลักฐานประจำใบงาน -->
             <div class="mt-8 border-t border-slate-300 pt-6">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-camera-retro text-teal-600"></i> หลักฐานภาพถ่ายการตรวจสอบและส่งของขึ้นรถ (Loading QC Photo Evidence)
@@ -407,11 +416,13 @@
                 </div>
             </div>
 
+            <!-- กล่องแสดงข้อความหมายเหตุรวมใต้รูป QC ของใบฟอร์มจริง -->
             <div class="mt-6 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm print-border">
                 <div class="text-xs text-slate-400 font-bold uppercase tracking-wide">หมายเหตุรวมประจำฟอร์ม (REMARKS):</div>
                 <div id="lbl-remarks" class="text-slate-800 whitespace-pre-wrap mt-1 font-medium">-</div>
             </div>
 
+            <!-- ท้ายกระดาษลงชื่อฟอร์ม -->
             <div class="mt-8 border-t border-slate-300 pt-6">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">ข้อกำหนดมาตรฐานการโหลดสินค้า (Logistics Standards)</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-500">
@@ -448,6 +459,7 @@
         </div>
     </div>
 
+    <!-- ลิงก์เชื่อมฐานข้อมูลและสคริปต์ควบคุม -->
     <script>
         const SUPABASE_URL = "https://wzsnwphomffvxtbksccu.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6c253cGhvbWZmdnh0YmtzY2N1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4ODQwOTIsImV4cCI6MjAzMjQ1MDA5Mn0.8S-mI0Vb0A7Slyw2gI2R-8qZ1LzP-FmBlnX_fG-p_g0";
@@ -790,7 +802,7 @@
                 job: document.getElementById('cfg-job').value,
                 truck: document.getElementById('cfg-truck').value,
                 delivery_date: document.getElementById('cfg-date').value,
-                customer_project: document.getElementById('cfg-customer').value,
+                customer: document.getElementById('cfg-customer').value,
                 loading_location: finalLocation,
                 time_start: document.getElementById('cfg-time-start').value,
                 time_end: document.getElementById('cfg-date-ready').value, 
@@ -802,13 +814,15 @@
 
         function applySheetDataSnapshot(snapshot) {
             if (!snapshot) return;
+            
+            // คืนค่าฟิลด์หลัก ๆ ลงในหน้าจอกล่องแอดมิน
             document.getElementById('cfg-job').value = snapshot.job || '';
             document.getElementById('cfg-truck').value = snapshot.truck || '';
             document.getElementById('cfg-date').value = snapshot.delivery_date || '';
-            document.getElementById('cfg-customer').value = snapshot.customer_project || '';
+            document.getElementById('cfg-customer').value = snapshot.customer || ''; 
             document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; 
 
-            // ดึงข้อมูลพิเศษที่ฝังไว้ใน rows ออกมาคืนค่าฟิลด์ต่างๆ บนหน้าจออย่างปลอดภัย
+            // คืนค่าข้อมูลเมทาดาต้าพิเศษ (เวลาขึ้นของ, หมายเหตุ, สถานที่ และรูปถ่ายหลักฐาน)
             if (snapshot.rows_metadata) {
                 document.getElementById('cfg-time-start').value = snapshot.rows_metadata.time_start || '08:30';
                 document.getElementById('cfg-remarks').value = snapshot.rows_metadata.remarks || '';
@@ -844,10 +858,15 @@
                     }
                 }
             } else {
-                // กรณีเป็นชุดข้อมูลเก่าที่ยังไม่มี metadata
+                // กรณีโหลดข้อมูลดิบชุดเก่า
                 document.getElementById('cfg-time-start').value = '08:30';
                 document.getElementById('cfg-remarks').value = '';
                 document.getElementById('cfg-location-select').value = 'main_factory';
+                
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById(`img-preview-${i}`).classList.add('hidden');
+                    document.getElementById(`img-preview-${i}`).closest('div').querySelector('.info-upload').classList.remove('hidden');
+                }
             }
             
             renderTableRowsFromData(snapshot.rows);
@@ -893,7 +912,7 @@
                         <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${row.itemJob}</td>
                         <td class="border border-slate-300 p-2 text-center">${imgHtml}</td>
                         <td class="border border-slate-300 p-2">
-                    <div class="font-semibold text-slate-800">${row.name}</div>
+                            <div class="font-semibold text-slate-800">${row.name}</div>
                             <div class="text-xs text-slate-400">${row.spec || '-'}</div>
                         </td>
                         <td class="border border-slate-300 p-2 text-center font-bold text-teal-800 bg-teal-50/20">
@@ -916,8 +935,9 @@
         }
 
         async function saveCurrentSheetToSupabase() {
-            const snapshot = getSheetDataSnapshot();
-            const primaryJob = snapshot.job.split(',')[0].trim();
+            // ดึงค่าตรง ๆ ป้องกันการ Error Crash จากโครงสร้าง Payload
+            const rawJob = document.getElementById('cfg-job').value;
+            const primaryJob = rawJob.split(',')[0].trim();
 
             if (!primaryJob) {
                 showNotification("กรุณาระบุเลขที่จ๊อบหลัก (Main Jobs) ก่อนบันทึก", false);
@@ -926,39 +946,53 @@
 
             showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
 
-            // บีบอัดข้อมูลสถานที่ เวลา และรูป QC ทั้งหมดไปฝังรวมไว้ในคอลัมน์ rows_metadata แทนเพื่อไม่ให้ระบบ Supabase ปฏิเสธการจัดเก็บ
+            const selectLoc = document.getElementById('cfg-location-select').value;
+            const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
+            
+            const base64Evidences = [];
+            for (let i = 1; i <= 4; i++) {
+                const img = document.getElementById(`img-preview-${i}`);
+                base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
+            }
+
+            // จัดโครงสร้างส่งไปตารางคลาวด์ให้ถูกสเปกเป๊ะ ๆ
             const payload = {
-                truck: snapshot.truck,
-                delivery_date: snapshot.delivery_date,
-                customer_project: snapshot.customer_project,
-                time_end: snapshot.time_end || '', // ส่งเป็นสตริงแบบปลอดภัย
-                rows: snapshot.rows, 
+                truck: document.getElementById('cfg-truck').value,
+                delivery_date: document.getElementById('cfg-date').value,
+                customer: document.getElementById('cfg-customer').value, 
+                time_end: document.getElementById('cfg-date-ready').value || '', 
+                rows: getSheetRowsData(), 
                 rows_metadata: {
-                    loading_location: snapshot.loading_location,
-                    time_start: snapshot.time_start,
-                    remarks: snapshot.remarks,
-                    evidences_pack: snapshot.evidences_pack
+                    loading_location: finalLocation,
+                    time_start: document.getElementById('cfg-time-start').value,
+                    remarks: document.getElementById('cfg-remarks').value,
+                    evidences_pack: base64Evidences
                 }
             };
 
-            const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob);
-            
-            let resultErr;
-            if (existing && existing.length > 0) {
-                const { error } = await _supabase.from('dispatch_sheets').update(payload).eq('job', primaryJob);
-                resultErr = error;
-            } else {
-                const { error } = await _supabase.from('dispatch_sheets').insert([{ job: primaryJob, ...payload }]);
-                resultErr = error;
-            }
+            try {
+                const { data: existing, error: checkErr } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob);
+                
+                let resultErr;
+                if (existing && existing.length > 0) {
+                    const { error } = await _supabase.from('dispatch_sheets').update(payload).eq('job', primaryJob);
+                    resultErr = error;
+                } else {
+                    const { error } = await _supabase.from('dispatch_sheets').insert([{ job: primaryJob, ...payload }]);
+                    resultErr = error;
+                }
 
-            if (resultErr) {
-                console.error(resultErr);
-                showNotification("เกิดข้อผิดพลาดในการเชื่อมต่อคลาวด์ ตรวจสอบสิทธิ์ตาราง", false);
-            } else {
-                localStorage.setItem('last_admin_job', primaryJob);
-                showNotification(`บันทึกใบงานชุดจ๊อบ ${primaryJob} สำเร็จแล้ว!`);
-                generateDriverLinkDisplay(primaryJob);
+                if (resultErr) {
+                    console.error(resultErr);
+                    showNotification("เกิดข้อผิดพลาดในการบันทึก ตรวจสอบสิทธิ์ตาราง", false);
+                } else {
+                    localStorage.setItem('last_admin_job', primaryJob);
+                    showNotification(`บันทึกใบงานชุดจ๊อบ ${primaryJob} สำเร็จ!`);
+                    generateDriverLinkDisplay(primaryJob);
+                }
+            } catch (err) {
+                console.error(err);
+                showNotification("ระบบขัดข้อง ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต", false);
             }
         }
 
@@ -972,7 +1006,18 @@
         function copyDriverLink() {
             const urlText = document.getElementById('lbl-driver-url').innerText;
             if (!urlText) {
-                showNotification("ไม่พบลิงก์ กรุณากดปุ่มบันทึกข้อมูลก่อน", false);
+                // หากหน้าจอโล่ง ลองใช้ค่าจากจ๊อบปัจจุบันที่มีเพื่อสร้างลิงก์ให้เลยทันที
+                const rawJob = document.getElementById('cfg-job').value;
+                const primaryJob = rawJob.split(',')[0].trim();
+                if (primaryJob) {
+                    generateDriverLinkDisplay(primaryJob);
+                    const retryUrlText = document.getElementById('lbl-driver-url').innerText;
+                    navigator.clipboard.writeText(retryUrlText).then(() => {
+                        showNotification("สร้างลิงก์อัตโนมัติและคัดลอกลงคลิปบอร์ดแล้ว!");
+                    });
+                } else {
+                    showNotification("ไม่พบข้อมูลจ๊อบ กรุณาระบุเลขจ๊อบหรือเซฟข้อมูลก่อนคัดลอก", false);
+                }
                 return;
             }
             navigator.clipboard.writeText(urlText).then(() => {
@@ -996,35 +1041,41 @@
             const listDiv = document.getElementById('saved-list');
             listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังดึงข้อมูลฐานคลาวด์...</div>';
 
-            const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer_project').order('job', { ascending: false });
-            
-            if (error || !data) {
-                listDiv.innerHTML = '<div class="text-center py-6 text-xs text-red-500">โหลดประวัติไม่สำเร็จ</div>';
-                return;
-            }
+            try {
+                const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer').order('job', { ascending: false });
+                
+                if (error || !data) {
+                    console.error(error);
+                    listDiv.innerHTML = '<div class="text-center py-6 text-xs text-red-500">โหลดประวัติไม่สำเร็จ</div>';
+                    return;
+                }
 
-            if (data.length === 0) {
-                listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-400">ไม่พบประวัติใบตรวจงานในฐานคลาวด์</div>';
-                return;
-            }
+                if (data.length === 0) {
+                    listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-400">ไม่พบประวัติใบตรวจงานในฐานคลาวด์</div>';
+                    return;
+                }
 
-            listDiv.innerHTML = '';
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.id = `history-card-${item.job}`;
-                card.className = "p-3 mb-2 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 flex justify-between items-center transition-all";
-                card.innerHTML = `
-                    <div class="truncate mr-2 cursor-pointer flex-grow" onclick="loadSupabaseSheet('${item.job}'); toggleHistoryModal(false);">
-                        <div class="font-mono font-bold text-sm text-indigo-700">JOB: ${item.job}</div>
-                        <div class="text-xs text-slate-700 font-semibold mt-0.5">${item.truck || 'ไม่ระบุรถ'}</div>
-                        <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer_project || '-'}</div>
-                    </div>
-                    <button onclick="deleteSheetFromSupabase('${item.job}')" class="text-slate-400 hover:text-red-500 p-2 shrink-0" title="ลบใบงานถาวร">
-                        <i class="fa-solid fa-trash-can text-sm"></i>
-                    </button>
-                `;
-                listDiv.appendChild(card);
-            });
+                listDiv.innerHTML = '';
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.id = `history-card-${item.job}`;
+                    card.className = "p-3 mb-2 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 flex justify-between items-center transition-all";
+                    card.innerHTML = `
+                        <div class="truncate mr-2 cursor-pointer flex-grow" onclick="loadSupabaseSheet('${item.job}'); toggleHistoryModal(false);">
+                            <div class="font-mono font-bold text-sm text-indigo-700">JOB: ${item.job}</div>
+                            <div class="text-xs text-slate-700 font-semibold mt-0.5">${item.truck || 'ไม่ระบุรถ'}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer || '-'}</div>
+                        </div>
+                        <button onclick="deleteSheetFromSupabase('${item.job}')" class="text-slate-400 hover:text-red-500 p-2 shrink-0" title="ลบใบงานถาวร">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    `;
+                    listDiv.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
+                listDiv.innerHTML = '<div class="text-center py-6 text-xs text-red-500">เกิดข้อผิดพลาดในการโหลดคลังประวัติ</div>';
+            }
         }
 
         async function deleteSheetFromSupabase(jobNo) {
@@ -1044,16 +1095,21 @@
         }
 
         async function loadSupabaseSheet(jobNo) {
-            const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
-            if (data && !error) {
-                applySheetDataSnapshot(data);
-                if (!isDriverMode) {
-                    localStorage.setItem('last_admin_job', jobNo);
-                    generateDriverLinkDisplay(jobNo);
+            try {
+                const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
+                if (data && !error) {
+                    applySheetDataSnapshot(data);
+                    if (!isDriverMode) {
+                        localStorage.setItem('last_admin_job', jobNo);
+                        generateDriverLinkDisplay(jobNo);
+                    }
+                    showNotification(`โหลดข้อมูลใบงานจ๊อบ ${jobNo} สำเร็จ`);
+                } else {
+                    showNotification("ไม่พบข้อมูลจ๊อบนี้บนคลาวด์", false);
                 }
-                showNotification(`โหลดข้อมูลใบงานจ๊อบ ${jobNo} สำเร็จ`);
-            } else {
-                showNotification("ไม่พบข้อมูลจ๊อบนี้บนคลาวด์", false);
+            } catch (err) {
+                console.error(err);
+                showNotification("มีข้อผิดพลาดในการดึงข้อมูลจ๊อบ", false);
             }
         }
 
