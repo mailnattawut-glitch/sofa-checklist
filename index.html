@@ -448,13 +448,7 @@
         </div>
     </div>
 
-    <script>// --- ส่วนเชื่อมต่อ SUPABASE ที่ถูกต้อง ---
-const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
-const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D"; // รหัสของคุณพี่ตัวเดิมเลยครับ
-
-// ให้เหลือบรรทัดนี้บรรทัดเดียว (ห้ามมีบรรทัด const supabase ซ้ำซ้อน)
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-// -------------------------------------
+    <script>
         let isDriverMode = false;
 
         function initApp() {
@@ -1081,7 +1075,52 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                 showNotification("มีข้อผิดพลาดในการดึงข้อมูลจ๊อบ", false);
             }
         }
+// --- ส่วนเชื่อมต่อ SUPABASE (วางตรงนี้ก่อนปิด script) ---
+const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ----------------------------------------------------
+// --- ฟังก์ชันสำหรับคลาวด์ ---
+async function saveSheetToSupabase() {
+    const jobNo = document.getElementById('cfg-job').value.trim();
+    if (!jobNo) { showNotification("กรุณาระบุเลขที่ Job", false); return; }
 
+    const payload = {
+        job: jobNo,
+        customer: document.getElementById('cfg-customer').value.trim(),
+        truck: document.getElementById('cfg-truck').value.trim(),
+        delivery_date: document.getElementById('cfg-date').value,
+        time_start: document.getElementById('cfg-time-start').value,
+        time_end: document.getElementById('cfg-time-end').value,
+        remarks: document.getElementById('cfg-remarks').value || '',
+        location: document.getElementById('cfg-location-select')?.value || 'main_factory',
+        rows_data: getSheetRowsData(),          
+        evidence_images: getEvidenceImagesBase64() 
+    };
+
+    const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', jobNo).maybeSingle();
+    const { error } = existing 
+        ? await _supabase.from('dispatch_sheets').update(payload).eq('job', jobNo)
+        : await _supabase.from('dispatch_sheets').insert([payload]);
+
+    if (error) { showNotification("บันทึกไม่สำเร็จ: " + error.message, false); }
+    else { showNotification(`บันทึกจ๊อบ ${jobNo} สำเร็จ!`); loadHistoryList(); }
+}
+
+async function loadSupabaseSheet(jobNo) {
+    try {
+        const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
+        if (data && !error) {
+            applySheetDataSnapshot(data);
+            showNotification(`โหลดจ๊อบ ${jobNo} สำเร็จ`);
+        } else {
+            showNotification("ไม่พบข้อมูลบนคลาวด์", false);
+        }
+    } catch (err) {
+        showNotification("ดึงข้อมูลขัดข้อง", false);
+    }
+}
+// ----------------------------
         window.onload = initApp;
     </script>
 </body>
