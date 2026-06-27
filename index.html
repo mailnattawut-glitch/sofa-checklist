@@ -451,18 +451,20 @@
         </div>
     </div>
 
-    <script>let isDriverMode = false;
+    <script>
+        let isDriverMode = false;
 
         function initApp() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('mode') && urlParams.get('mode') === 'driver') {
                 isDriverMode = true;
                 document.body.classList.add('driver-mode');
-                const adminBar = document.getElementById('admin-control-bar');
-                if (adminBar) adminBar.remove();
+                document.getElementById('admin-control-bar').remove();
                 
                 const configs = document.querySelectorAll('.no-print');
-                configs.forEach(el => { if (el.id !== 'toast') el.remove(); });
+                configs.forEach(el => {
+                    if (el.id !== 'toast') el.remove();
+                });
                 
                 const deletes = document.querySelectorAll('.th-delete-column, .td-delete-column');
                 deletes.forEach(el => el.remove());
@@ -473,119 +475,610 @@
             
             syncHeader();
             
-            if (isDriverMode) {
-    isDriverMode = true;
-    document.body.classList.add('driver-mode');
-    
-    // 1. ปลดล็อกเฉพาะช่องที่คนขับต้องพิมพ์ได้
-    const editableFields = ['cfg-remarks', 'cfg-location-select', 'cfg-location-custom'];
-    editableFields.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.disabled = false;
-    });
-
-    // 2. สร้างปุ่มบันทึกให้คนขับ (แทนที่แถบแอดมินที่ถูกลบไป)
-    const driverSaveBtn = document.createElement('button');
-    driverSaveBtn.innerText = "บันทึกข้อมูล (สำหรับคนขับ)";
-    driverSaveBtn.className = "fixed bottom-5 right-5 bg-teal-600 text-white p-4 rounded-xl shadow-2xl font-bold z-50";
-    driverSaveBtn.onclick = saveCurrentSheetToSupabase;
-    document.body.appendChild(driverSaveBtn);
-}
-        }
-
-        // ... (ฟังก์ชัน initApp, handleLocationSelect, syncHeader, ... คงเดิมไว้จนถึง saveCurrentSheetToSupabase)
-
-        async function saveCurrentSheetToSupabase() {
-    const rawJob = document.getElementById('cfg-job').value;
-    const primaryJob = rawJob.split(',')[0].trim();
-
-    if (!primaryJob) {
-        showNotification("กรุณาระบุเลขที่จ๊อบหลักก่อนบันทึก", false);
-        return;
-    }
-
-    showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
-
-    // ดึงค่าสถานที่ (ถ้าเลือก 'other' ให้เอาค่าจากช่อง custom)
-    const selectLoc = document.getElementById('cfg-location-select').value;
-    const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
-    
-    // ดึงค่าหมายเหตุ
-    const remarksValue = document.getElementById('cfg-remarks').value;
-
-    const base64Evidences = [];
-    for (let i = 1; i <= 4; i++) {
-        const img = document.getElementById(`img-preview-${i}`);
-        base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
-    }
-
-    const payload = {
-        job: primaryJob,
-        customer: document.getElementById('cfg-customer').value,
-        truck: document.getElementById('cfg-truck').value,
-        delivery_date: document.getElementById('cfg-date').value,
-        time_start: document.getElementById('cfg-time-start').value,
-        time_end: document.getElementById('cfg-time-end').value || '', // แก้จาก cfg-date-ready เป็น cfg-time-end ตามไฟล์คุณ
-        remarks: remarksValue,     // <--- เพิ่มตรงนี้
-        location: finalLocation,   // <--- เพิ่มตรงนี้
-        rows_data: getSheetRowsData(),
-        evidence_images: base64Evidences
-    };
-
-    const { data: existing } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob).maybeSingle();
-    const { error } = existing 
-        ? await _supabase.from('dispatch_sheets').update(payload).eq('job', primaryJob)
-        : await _supabase.from('dispatch_sheets').insert([payload]);
-
-    if (error) { 
-        showNotification("บันทึกไม่สำเร็จ: " + error.message, false); 
-    } else { 
-        showNotification(`บันทึกจ๊อบ ${primaryJob} สำเร็จ!`); 
-        loadHistoryList(); 
-    }
-} catch (err) {
-                showNotification("ระบบขัดข้อง", false);
+            if (!isDriverMode) {
+                const lastJob = localStorage.getItem('last_admin_job');
+                if (lastJob) {
+                    loadSupabaseSheet(lastJob);
+                }
+            } else {
+                const jobFromUrl = urlParams.get('job');
+                if (jobFromUrl) {
+                    loadSupabaseSheet(jobFromUrl);
+                }
             }
         }
 
-        function applySheetDataSnapshot(snapshot) {
-    if (!snapshot) return;
-    
-    document.getElementById('cfg-job').value = snapshot.job || '';
-    document.getElementById('cfg-truck').value = snapshot.truck || '';
-    document.getElementById('cfg-date').value = snapshot.delivery_date || '';
-    document.getElementById('cfg-customer').value = snapshot.customer || '';
-    document.getElementById('cfg-time-end').value = snapshot.time_end || '';
-    document.getElementById('cfg-time-start').value = snapshot.time_start || '';
-    
-    // โหลดหมายเหตุ
-    document.getElementById('cfg-remarks').value = snapshot.remarks || '';
-    
-    // โหลดสถานที่
-    const selectLoc = document.getElementById('cfg-location-select');
-    const customLoc = document.getElementById('cfg-location-custom');
-    if (selectLoc) {
-        // เช็คว่าสถานที่ที่เซฟไว้มีในตัวเลือกไหม
-        const optionExists = Array.from(selectLoc.options).some(o => o.value === snapshot.location);
-        if (optionExists) {
-            selectLoc.value = snapshot.location;
-            customLoc.value = '';
-            customLoc.disabled = true;
-        } else {
-            selectLoc.value = 'other';
-            customLoc.disabled = false;
-            customLoc.value = snapshot.location || '';
+        function handleLocationSelect(selectObj) {
+            const customInput = document.getElementById('cfg-location-custom');
+            if (selectObj.value === 'other') {
+                customInput.disabled = false;
+                customInput.classList.remove('bg-slate-100');
+                customInput.focus();
+            } else {
+                customInput.value = '';
+                customInput.disabled = true;
+                customInput.classList.add('bg-slate-100');
+            }
+            syncHeader();
         }
+
+        function syncHeader() {
+            // ดึงค่ามาแสดงผลสดๆ ฝั่งขวาทันทีโดยไม่ต้องรอเซฟคลาวด์เสร็จ
+            document.getElementById('lbl-truck').innerText = document.getElementById('cfg-truck').value || '-';
+            document.getElementById('lbl-date').innerText = document.getElementById('cfg-date').value || '-';
+            document.getElementById('lbl-job').innerText = document.getElementById('cfg-job').value || '-';
+            document.getElementById('lbl-customer').innerText = document.getElementById('cfg-customer').value || '-';
+            document.getElementById('lbl-time-start').innerText = document.getElementById('cfg-time-start').value || '-';
+            document.getElementById('lbl-remarks').innerText = document.getElementById('cfg-remarks').value || '-';
+
+            const readyDispatchVal = document.getElementById('cfg-date-ready').value;
+            if (readyDispatchVal) {
+                const d = new Date(readyDispatchVal);
+                document.getElementById('lbl-time-end').innerText = d.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+            } else {
+                document.getElementById('lbl-time-end').innerText = '-';
+            }
+
+            const selectLoc = document.getElementById('cfg-location-select');
+            if (selectLoc && selectLoc.value === 'other') {
+                document.getElementById('lbl-location').innerText = document.getElementById('cfg-location-custom').value || 'ระบุเอง';
+            } else if (selectLoc) {
+                document.getElementById('lbl-location').innerText = selectLoc.options[selectLoc.selectedIndex].text;
+            }
+            
+            updateFormStatusLabel();
+        }
+
+        function setCurrentTime(inputId) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false });
+            document.getElementById(inputId).value = timeStr;
+            syncHeader();
+        }
+
+        function toggleSquare(el) {
+            el.classList.toggle('checked');
+            const icon = el.querySelector('i');
+            if (icon) icon.classList.toggle('hidden');
+            updateFormStatusLabel();
+        }
+
+        function updateCheckboxes(inputObj) {
+            const row = inputObj.closest('tr');
+            const container = row.querySelector('.box-container');
+            let targetQty = parseInt(inputObj.value) || 1;
+            if (targetQty < 1) { targetQty = 1; inputObj.value = 1; }
+
+            const currentBoxes = container.querySelectorAll('.check-square');
+            if (currentBoxes.length < targetQty) {
+                for (let i = currentBoxes.length; i < targetQty; i++) {
+                    const box = document.createElement('div');
+                    box.className = "check-square";
+                    box.onclick = function() { toggleSquare(this); };
+                    box.innerHTML = '<i class="fa-solid fa-check text-xs hidden"></i>';
+                    container.appendChild(box);
+                }
+            } else if (currentBoxes.length > targetQty) {
+                for (let i = currentBoxes.length - 1; i >= targetQty; i--) {
+                    currentBoxes[i].remove();
+                }
+            }
+            updateFormStatusLabel();
+        }
+
+        function updateFormStatusLabel() {
+            const allSquares = document.querySelectorAll('.check-square');
+            const checkedSquares = document.querySelectorAll('.check-square.checked');
+            const lblStatus = document.getElementById('lbl-status');
+
+            if (allSquares.length === 0) {
+                lblStatus.innerText = "ไม่มีรายการสินค้า";
+                lblStatus.className = "text-slate-400 font-semibold";
+                return;
+            }
+
+            if (checkedSquares.length === allSquares.length) {
+                lblStatus.innerText = "เช็กสินค้าครบถ้วน - พร้อมปล่อยรถ";
+                lblStatus.className = "text-teal-600 font-bold";
+            } else if (checkedSquares.length > 0) {
+                lblStatus.innerText = `กำลังลำเลียง (${checkedSquares.length}/${allSquares.length} ชิ้น)`;
+                lblStatus.className = "text-indigo-600 font-semibold";
+            } else {
+                lblStatus.innerText = "รอยืนยันข้อมูล";
+                lblStatus.className = "text-amber-600 font-semibold";
+            }
+        }
+
+        function openAddRowModal() {
+            document.getElementById('add-row-modal').classList.remove('hidden');
+            document.getElementById('new-row-job').value = document.getElementById('cfg-job').value.split(',')[0].trim();
+        }
+
+        function closeAddRowModal() {
+            document.getElementById('add-row-modal').classList.add('hidden');
+            document.getElementById('new-row-name').value = '';
+            document.getElementById('new-row-spec').value = '';
+            document.getElementById('new-row-qty').value = '1';
+            document.getElementById('new-row-remark').value = '';
+            document.getElementById('new-row-image').value = '';
+        }
+
+        function submitNewRow() {
+            const job = document.getElementById('new-row-job').value.trim();
+            const catId = document.getElementById('new-row-category').value;
+            const name = document.getElementById('new-row-name').value.trim();
+            const spec = document.getElementById('new-row-spec').value.trim();
+            const qty = parseInt(document.getElementById('new-row-qty').value) || 1;
+            const unit = document.getElementById('new-row-unit').value.trim() || 'ตัว';
+            const remark = document.getElementById('new-row-remark').value.trim();
+            const imgFile = document.getElementById('new-row-image').files[0];
+
+            if (!job || !name) {
+                showNotification("กรุณากรอกข้อมูล เลขที่จ๊อบ และ ชื่อสินค้า ให้ครบถ้วน", false);
+                return;
+            }
+
+            if (imgFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appendRowToDOM(catId, job, name, spec, qty, unit, remark, e.target.result);
+                };
+                reader.readAsDataURL(imgFile);
+            } else {
+                appendRowToDOM(catId, job, name, spec, qty, unit, remark, null);
+            }
+
+            closeAddRowModal();
+            showNotification("เพิ่มรายการสินค้าใหม่ลงตารางเรียบร้อย");
+        }
+
+        function appendRowToDOM(catId, job, name, spec, qty, unit, remark, imgBase64) {
+            const tbody = document.getElementById('table-body');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            let insertBeforeTarget = null;
+            if (catId === 'cat-1') {
+                const nextCatIndex = rows.findIndex(r => r.id === 'cat-2');
+                insertBeforeTarget = rows[nextCatIndex];
+            }
+
+            const newTr = document.createElement('tr');
+            newTr.className = "hover:bg-slate-50";
+            newTr.setAttribute('data-parent-cat', catId);
+
+            let imgHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
+            if (imgBase64) {
+                imgHtml = `<img src="${imgBase64}" class="w-12 h-12 object-cover rounded border border-slate-200 cursor-zoom-in" onclick="window.open(this.src)">`;
+            }
+
+            let boxesHtml = '';
+            for (let i = 0; i < qty; i++) {
+                boxesHtml += '<div class="check-square" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs hidden"></i></div> ';
+            }
+
+            newTr.innerHTML = `
+                <td class="border border-slate-300 p-2 text-center text-slate-500 index-cell">-</td>
+                <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${job}</td>
+                <td class="border border-slate-300 p-2 text-center">${imgHtml}</td>
+                <td class="border border-slate-300 p-2">
+                    <div class="font-semibold text-slate-800">${name}</div>
+                    <div class="text-xs text-slate-400">${spec || '-'}</div>
+                </td>
+                <td class="border border-slate-300 p-2 text-center font-bold text-teal-800 bg-teal-50/20">
+                    <input type="number" min="1" value="${qty}" oninput="updateCheckboxes(this)" class="w-12 text-center bg-transparent border-b border-transparent focus:outline-none focus:border-teal-500">
+                </td>
+                <td class="border border-slate-300 p-2 text-center text-slate-500">${unit}</td>
+                <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${boxesHtml}</div></td>
+                <td class="border border-slate-300 p-2"><input type="text" value="${remark}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400"></td>
+                <td class="td-delete-column border border-slate-300 p-2 text-center no-print">
+                    <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
+                </td>
+            `;
+
+            if (insertBeforeTarget) {
+                tbody.insertBefore(newTr, insertBeforeTarget);
+            } else {
+                tbody.appendChild(newTr);
+            }
+
+            reIndexTable();
+        }
+
+        function deleteRow(btn) {
+            if (confirm("คุณแน่ใจไหมว่าต้องการลบสินค้าแถวนี้?")) {
+                btn.closest('tr').remove();
+                reIndexTable();
+                showNotification("ลบรายการสินค้าแล้ว");
+            }
+        }
+
+        function reIndexTable() {
+            const tbody = document.getElementById('table-body');
+            let c1 = 1, c2 = 1;
+            Array.from(tbody.children).forEach(tr => {
+                if (tr.id === 'cat-1' || tr.id === 'cat-2') return;
+                const pCat = tr.getAttribute('data-parent-cat');
+                const cell = tr.querySelector('.index-cell');
+                if (pCat === 'cat-1') {
+                    if (cell) cell.innerText = `1.${c1++}`;
+                } else {
+                    if (cell) cell.innerText = `2.${c2++}`;
+                }
+            });
+            updateFormStatusLabel();
+        }
+
+        function previewEvidenceImage(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(previewId);
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                    input.closest('div').querySelector('.info-upload').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function showNotification(msg, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            if(!toast) return;
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').innerText = msg;
+            
+            if (isSuccess) {
+                icon.className = "p-1 bg-teal-500/20 text-teal-400 rounded-full";
+                icon.innerHTML = '<i class="fa-solid fa-check"></i>';
+            } else {
+                icon.className = "p-1 bg-red-500/20 text-red-400 rounded-full";
+                icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }, 3500);
+        }
+
+        function getSheetRowsData() {
+            const tbody = document.getElementById('table-body');
+            const rows = [];
+            if(!tbody) return rows;
+            Array.from(tbody.children).forEach(tr => {
+                if (tr.id === 'cat-1') {
+                    rows.push({ isCategory: true, catId: 'cat-1', title: tr.children[1].innerText });
+                } else if (tr.id === 'cat-2') {
+                    rows.push({ isCategory: true, catId: 'cat-2', title: tr.children[1].innerText });
+                } else {
+                    const num = tr.querySelector('.index-cell') ? tr.querySelector('.index-cell').innerText : '';
+                    const itemJob = tr.children[1].innerText;
+                    const imgEl = tr.children[2].querySelector('img');
+                    const imgBase64 = imgEl ? imgEl.src : null;
+                    const name = tr.children[3].querySelector('.font-semibold').innerText;
+                    const spec = tr.children[3].querySelector('.text-slate-400').innerText;
+                    const qty = parseInt(tr.children[4].querySelector('input').value) || 1;
+                    const unit = tr.children[5].innerText;
+                    const parentCat = tr.getAttribute('data-parent-cat');
+                    const remark = tr.children[7].querySelector('input') ? tr.children[7].querySelector('input').value : '';
+
+                    const squares = tr.children[6].querySelectorAll('.check-square');
+                    const checksState = Array.from(squares).map(sq => sq.classList.contains('checked'));
+
+                    rows.push({
+                        isCategory: false, num: num, itemJob: itemJob, name: name, spec: spec,
+                        qty: qty, unit: unit, img: imgBase64, parentCat: parentCat, checksState: checksState, remark: remark
+                    });
+                }
+            });
+            return rows;
+        }
+
+        function applySheetDataSnapshot(snapshot) {
+            if (!snapshot) return;
+            
+            document.getElementById('cfg-job').value = snapshot.job || '';
+            document.getElementById('cfg-truck').value = snapshot.truck || '';
+            document.getElementById('cfg-date').value = snapshot.delivery_date || '';
+            
+            // ปรับแมปค่าให้ตรงกับคอลัมน์ดั้งเดิมของตารางฐานข้อมูลหลัก
+           document.getElementById('cfg-customer').value =
+    snapshot.customer || '';
+            document.getElementById('cfg-date-ready').value = snapshot.time_end || ''; 
+
+           if (snapshot.rows_data) {
+
+    document.getElementById('cfg-time-start').value =
+        snapshot.time_start || '08:30';
+
+    document.getElementById('cfg-remarks').value = '';
+
+    const selectLoc =
+        document.getElementById('cfg-location-select');
+
+    const customInput =
+        document.getElementById('cfg-location-custom');
+
+    if (selectLoc) {
+        selectLoc.value = 'main_factory';
     }
 
-    renderTableRowsFromData(snapshot.rows_data);
-    syncHeader();
-}
-        // ส่วนที่เหลือของฟังก์ชัน (renderTableRowsFromData, loadSupabaseSheet, ฯลฯ) ให้คงไว้เหมือนเดิมครับ
-        const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if (customInput) {
+        customInput.value = '';
+    }
 
+    const evPics =
+        snapshot.evidence_images || [];
+                for (let i = 1; i <= 4; i++) {
+                    const img = document.getElementById(`img-preview-${i}`);
+                    if (img && evPics[i-1]) {
+                        img.src = evPics[i-1];
+                        img.classList.remove('hidden');
+                        img.closest('div').querySelector('.info-upload').classList.add('hidden');
+                    } else if (img) {
+                        img.classList.add('hidden');
+                        img.closest('div').querySelector('.info-upload').classList.remove('hidden');
+                    }
+                }
+            } else {
+                document.getElementById('cfg-time-start').value = '08:30';
+                document.getElementById('cfg-remarks').value = '';
+                if(document.getElementById('cfg-location-select')) document.getElementById('cfg-location-select').value = 'main_factory';
+                
+                for (let i = 1; i <= 4; i++) {
+                    const img = document.getElementById(`img-preview-${i}`);
+                    if(img) {
+                        img.classList.add('hidden');
+                        img.closest('div').querySelector('.info-upload').classList.remove('hidden');
+                    }
+                }
+            }
+            
+            renderTableRowsFromData(snapshot.rows_data);
+            syncHeader();
+        }
+
+        function renderTableRowsFromData(rowsArray) {
+            if (!rowsArray || rowsArray.length === 0) return;
+            const tbody = document.getElementById('table-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            rowsArray.forEach(row => {
+                if (row.isCategory) {
+                    const cTr = document.createElement('tr');
+                    cTr.id = row.catId;
+                    cTr.className = "bg-slate-100 font-bold text-slate-800 print:bg-slate-50";
+                    cTr.innerHTML = `
+                        <td class="border border-slate-300 p-2 text-center">${row.catId === 'cat-1'?'1':'2'}</td>
+                        <td colspan="7" class="border border-slate-300 p-2">${row.title}</td>
+                        <td class="td-delete-column border border-slate-300 p-2 text-center no-print"></td>
+                    `;
+                    tbody.appendChild(cTr);
+                } else {
+                    const rTr = document.createElement('tr');
+                    rTr.className = "hover:bg-slate-50";
+                    rTr.setAttribute('data-parent-cat', row.parentCat);
+
+                    let imgHtml = `<div class="w-12 h-12 rounded border border-slate-200 bg-slate-100 flex items-center justify-center text-slate-400 text-xs overflow-hidden"><span class="text-[10px]">ไม่มีรูป</span></div>`;
+                    if (row.img) {
+                        imgHtml = `<img src="${row.img}" class="w-12 h-12 object-cover rounded border border-slate-200 cursor-zoom-in" onclick="window.open(this.src)">`;
+                    }
+
+                    let boxesHtml = '';
+                    if (row.checksState && row.checksState.length > 0) {
+                        row.checksState.forEach(isChecked => {
+                            boxesHtml += `<div class="check-square ${isChecked?'checked':''}" onclick="toggleSquare(this)"><i class="fa-solid fa-check text-xs ${isChecked?'':'hidden'}"></i></div> `;
+                        });
+                    }
+
+                    rTr.innerHTML = `
+                        <td class="border border-slate-300 p-2 text-center text-slate-500 index-cell">${row.num}</td>
+                        <td class="border border-slate-300 p-2 text-center font-mono font-bold text-indigo-700 bg-indigo-50/10">${row.itemJob}</td>
+                        <td class="border border-slate-300 p-2 text-center">${imgHtml}</td>
+                        <td class="border border-slate-300 p-2">
+                            <div class="font-semibold text-slate-800">${row.name}</div>
+                            <div class="text-xs text-slate-400">${row.spec || '-'}</div>
+                        </td>
+                        <td class="border border-slate-300 p-2 text-center font-bold text-teal-800 bg-teal-50/20">
+                            <input type="number" min="1" value="${row.qty}" oninput="updateCheckboxes(this)" class="w-12 text-center bg-transparent border-b border-transparent focus:outline-none focus:border-teal-500">
+                        </td>
+                        <td class="border border-slate-300 p-2 text-center text-slate-500">${row.unit}</td>
+                        <td class="border border-slate-300 p-2"><div class="flex flex-wrap gap-1.5 py-1 box-container">${boxesHtml}</div></td>
+                        <td class="border border-slate-300 p-2"><input type="text" value="${row.remark || ''}" class="w-full bg-transparent text-slate-700 text-xs focus:outline-none focus:border-b focus:border-slate-400"></td>
+                        <td class="td-delete-column border border-slate-300 p-2 text-center no-print">
+                            <button onclick="deleteRow(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(rTr);
+                }
+            });
+        }
+
+        async function saveCurrentSheetToSupabase() {
+            const rawJob = document.getElementById('cfg-job').value;
+            const primaryJob = rawJob.split(',')[0].trim();
+
+            if (!primaryJob) {
+                showNotification("กรุณาระบุเลขที่จ๊อบหลัก (Main Jobs) ก่อนบันทึก", false);
+                return;
+            }
+
+            showNotification("กำลังส่งข้อมูลขึ้นระบบคลาวด์...");
+
+            const selectLoc = document.getElementById('cfg-location-select').value;
+            const finalLocation = selectLoc === 'other' ? document.getElementById('cfg-location-custom').value : selectLoc;
+            
+            const base64Evidences = [];
+            for (let i = 1; i <= 4; i++) {
+                const img = document.getElementById(`img-preview-${i}`);
+                base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
+            }
+
+            // แมปข้อมูลจัดรูปฟิลด์ให้ถูกต้องตามสเปกโครงสร้างตู้ฐานข้อมูลเดิม ป้องกันโดน Reject
+            const payload = {
+    job: primaryJob,
+    customer: document.getElementById('cfg-customer').value,
+    truck: document.getElementById('cfg-truck').value,
+    delivery_date: document.getElementById('cfg-date').value,
+    time_start: document.getElementById('cfg-time-start').value,
+    time_end: document.getElementById('cfg-date-ready').value || '',
+    rows_data: getSheetRowsData(),
+    evidence_images: base64Evidences
+};
+
+            try {
+                const { data: existing, error: checkErr } = await _supabase.from('dispatch_sheets').select('job').eq('job', primaryJob);
+                
+                let resultErr;
+                if (existing && existing.length > 0) {
+                    const { error } = await _supabase.from('dispatch_sheets').update(payload).eq('job', primaryJob);
+                    resultErr = error;
+                } else {
+                    const { error } = await _supabase.from('dispatch_sheets').insert([{ job: primaryJob, ...payload }]);
+                    resultErr = error;
+                }
+
+                if (resultErr) {
+                    console.error(resultErr);
+                    showNotification("บันทึกไม่สำเร็จ ตรวจสอบความถูกต้องคอลัมน์ตาราง", false);
+                } else {
+                    localStorage.setItem('last_admin_job', primaryJob);
+                    showNotification(`บันทึกใบงานชุดจ๊อบ ${primaryJob} สำเร็จเรียบร้อย!`);
+                    generateDriverLinkDisplay(primaryJob);
+                }
+            } catch (err) {
+                console.error(err);
+                showNotification("ระบบขัดข้องทางเครือข่าย", false);
+            }
+        }
+
+        function generateDriverLinkDisplay(jobNo) {
+            const baseUrl = window.location.href.split('?')[0];
+            const driverUrl = `${baseUrl}?mode=driver&job=${encodeURIComponent(jobNo)}`;
+            const urlLbl = document.getElementById('lbl-driver-url');
+            const noticeBox = document.getElementById('link-notice-box');
+            if(urlLbl) urlLbl.innerText = driverUrl;
+            if(noticeBox) noticeBox.classList.remove('hidden');
+        }
+
+        function copyDriverLink() {
+            const rawJob = document.getElementById('cfg-job').value;
+            const primaryJob = rawJob.split(',')[0].trim();
+            
+            if (!primaryJob) {
+                showNotification("ไม่พบข้อมูลจ๊อบหลัก กรุณาระบุเลขจ๊อบก่อนคัดลอกลิงก์", false);
+                return;
+            }
+
+            // ปลั๊กอินสร้างลิงก์สดให้ทันทีโดยไม่ต้องง้อการหน่วงเวลาดึงข้อความบนหน้าจอ
+            const baseUrl = window.location.href.split('?')[0];
+            const driverUrl = `${baseUrl}?mode=driver&job=${encodeURIComponent(primaryJob)}`;
+            
+            navigator.clipboard.writeText(driverUrl).then(() => {
+                generateDriverLinkDisplay(primaryJob);
+                showNotification("คัดลอกลิงก์สำหรับคนขับรถลงคลิปบอร์ดแล้ว!");
+            }).catch(err => {
+                showNotification("ไม่สามารถคัดลอกได้อัตโนมัติ กรุณาลองอีกครั้ง", false);
+            });
+        }
+
+        async function toggleHistoryModal(open) {
+            const modal = document.getElementById('history-modal');
+            if(!modal) return;
+            if (open) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                await loadHistoryListFromSupabase();
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        async function loadHistoryListFromSupabase() {
+            const listDiv = document.getElementById('saved-list');
+            if(!listDiv) return;
+            listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>กำลังดึงข้อมูลฐานคลาวด์...</div>';
+
+            try {
+                const { data, error } = await _supabase.from('dispatch_sheets').select('job, truck, delivery_date, customer').order('job', { ascending: false });
+                
+                if (error || !data) {
+                    console.error(error);
+                    listDiv.innerHTML = '<div class="text-center py-6 text-xs text-red-500">โหลดประวัติไม่สำเร็จ</div>';
+                    return;
+                }
+
+                if (data.length === 0) {
+                    listDiv.innerHTML = '<div class="text-center py-6 text-xs text-slate-400">ไม่พบประวัติใบตรวจงานในฐานคลาวด์</div>';
+                    return;
+                }
+
+                listDiv.innerHTML = '';
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.id = `history-card-${item.job}`;
+                    card.className = "p-3 mb-2 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 flex justify-between items-center transition-all";
+                    card.innerHTML = `
+                        <div class="truncate mr-2 cursor-pointer flex-grow" onclick="loadSupabaseSheet('${item.job}'); toggleHistoryModal(false);">
+                            <div class="font-mono font-bold text-sm text-indigo-700">JOB: ${item.job}</div>
+                            <div class="text-xs text-slate-700 font-semibold mt-0.5">${item.truck || 'ไม่ระบุรถ'}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">${item.delivery_date || '-'} | ${item.customer || '-'}</div>
+                        </div>
+                        <button onclick="deleteSheetFromSupabase('${item.job}')" class="text-slate-400 hover:text-red-500 p-2 shrink-0" title="ลบใบงานถาวร">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    `;
+                    listDiv.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
+                listDiv.innerHTML = '<div class="text-center py-6 text-xs text-red-500">เกิดข้อผิดพลาดในการโหลดคลังประวัติ</div>';
+            }
+        }
+
+        async function deleteSheetFromSupabase(jobNo) {
+            if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบใบงานเลขที่ ${jobNo} ออกจากคลาวด์ถาวร?`)) return;
+            
+            const { error } = await _supabase.from('dispatch_sheets').delete().eq('job', jobNo);
+            if (error) {
+                showNotification("ไม่สามารถลบข้อมูลได้", false);
+            } else {
+                showNotification(`ลบใบงาน ${jobNo} สำเร็จ`);
+                if (localStorage.getItem('last_admin_job') === jobNo) {
+                    localStorage.removeItem('last_admin_job');
+                }
+                const card = document.getElementById(`history-card-${jobNo}`);
+                if (card) card.remove();
+            }
+        }
+
+        async function loadSupabaseSheet(jobNo) {
+            try {
+                const { data, error } = await _supabase.from('dispatch_sheets').select('*').eq('job', jobNo).single();
+                if (data && !error) {
+                    applySheetDataSnapshot(data);
+                    if (!isDriverMode) {
+                        localStorage.setItem('last_admin_job', jobNo);
+                        generateDriverLinkDisplay(jobNo);
+                    }
+                    showNotification(`โหลดข้อมูลใบงานจ๊อบ ${jobNo} สำเร็จ`);
+                } else {
+                    showNotification("ไม่พบข้อมูลจ๊อบนี้บนคลาวด์", false);
+                }
+            } catch (err) {
+                console.error(err);
+                showNotification("มีข้อผิดพลาดในการดึงข้อมูลจ๊อบ", false);
+            }
+        }
+// --- ส่วนเชื่อมต่อ SUPABASE (วางตรงนี้ก่อนปิด script) ---
+const SUPABASE_URL = "https://mejfntodbvatmxjknqqy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_9Ap8QZR9sP0gKgA1lwgzRg_BUs72U2D";
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ----------------------------
         window.onload = initApp;
     </script>
 </body>
