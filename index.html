@@ -455,6 +455,23 @@
         let isDriverMode = false;
 
         function initApp() {
+// --- โค้ดเพิ่มปุ่มบันทึกสำหรับคนขับ ---
+if (window.location.search.includes('mode=driver')) {
+    const btn = document.createElement("button");
+    btn.innerText = "💾 บันทึกข้อมูลใบงาน";
+    btn.style.cssText = "position: fixed; bottom: 20px; right: 20px; padding: 15px 30px; background-color: #0d9488; color: white; border-radius: 12px; font-weight: bold; z-index: 9999;";
+    btn.onclick = saveCurrentSheetToSupabase;
+    document.body.appendChild(btn);
+    
+    // ปลดล็อกช่องให้คนขับพิมพ์ได้
+    setTimeout(() => {
+        const fields = ['cfg-remarks', 'cfg-location-select', 'cfg-location-custom'];
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = false;
+        });
+    }, 1000);
+}
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('mode') && urlParams.get('mode') === 'driver') {
                 isDriverMode = true;
@@ -916,14 +933,16 @@
                 base64Evidences.push(img && !img.classList.contains('hidden') ? img.src : null);
             }
 
-            // แมปข้อมูลจัดรูปฟิลด์ให้ถูกต้องตามสเปกโครงสร้างตู้ฐานข้อมูลเดิม ป้องกันโดน Reject
-            const payload = {
+    // แก้ไขส่วน payload ภายในฟังก์ชัน saveCurrentSheetToSupabase
+const payload = {
     job: primaryJob,
     customer: document.getElementById('cfg-customer').value,
     truck: document.getElementById('cfg-truck').value,
     delivery_date: document.getElementById('cfg-date').value,
     time_start: document.getElementById('cfg-time-start').value,
     time_end: document.getElementById('cfg-date-ready').value || '',
+    remarks: document.getElementById('cfg-remarks').value,    // <--- เพิ่มบรรทัดนี้
+    location: finalLocation,                                // <--- เพิ่มบรรทัดนี้
     rows_data: getSheetRowsData(),
     evidence_images: base64Evidences
 };
